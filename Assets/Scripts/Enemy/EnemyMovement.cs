@@ -14,11 +14,12 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        target = FindNearestTarget();
     }
 
     void Update()
     {
+        target = FindNearestTarget();
+
         if (target != null && canStart == true)
         {
             MoveTowardsTarget();
@@ -95,5 +96,13 @@ public class EnemyMovement : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Target"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
