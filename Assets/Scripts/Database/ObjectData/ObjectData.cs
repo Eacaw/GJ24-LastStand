@@ -18,11 +18,6 @@ public abstract class ObjectData : MonoBehaviour
     public LayoutData Shape { get; set; } // Grid layout, with pivot on 0,0
     public int currentRotation { get; set; } // deg
 
-    // Not yet implemented/used in the game
-    public float ProductionRate { get; set; }
-    public float EnergyConsumption { get; set; }
-    public float Cost { get; set; }
-
     public ObjectData(string objectName, LayoutData shape)
     {
         this.Id = Guid.NewGuid().ToString();
