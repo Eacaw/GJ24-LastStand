@@ -21,11 +21,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (target != null && canStart == true)
         {
-            Vector3 direction = (target.position - transform.position).normalized;
-            Vector3 avoidanceDirection = GetAvoidanceDirection();
-            Vector3 moveDirection = (direction + avoidanceDirection).normalized;
-
-            rb.MovePosition(transform.position + moveDirection * speed * Time.deltaTime);
+            MoveTowardsTarget();
         }
     }
 
@@ -48,6 +44,15 @@ public class EnemyMovement : MonoBehaviour
         return nearestTarget;
     }
 
+    void MoveTowardsTarget()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        Vector3 avoidanceDirection = GetAvoidanceDirection();
+        Vector3 moveDirection = (direction + avoidanceDirection).normalized;
+
+        rb.MovePosition(transform.position + moveDirection * speed * Time.deltaTime);
+    }
+
     Vector3 GetAvoidanceDirection()
     {
         Vector3 avoidance = Vector3.zero;
@@ -59,6 +64,27 @@ public class EnemyMovement : MonoBehaviour
             {
                 Vector3 directionToObstacle = transform.position - obstacle.transform.position;
                 avoidance += directionToObstacle / directionToObstacle.sqrMagnitude;  // Weighted by distance
+            }
+        }
+
+        // Check if avoidance is zero and try alternative directions
+        if (avoidance == Vector3.zero)
+        {
+            Vector3[] alternativeDirections = {
+                transform.right, -transform.right,
+                transform.forward, -transform.forward,
+                (transform.right + transform.forward).normalized,
+                (-transform.right + transform.forward).normalized,
+                (transform.right - transform.forward).normalized,
+                (-transform.right - transform.forward).normalized
+            };
+
+            foreach (var altDir in alternativeDirections)
+            {
+                if (!Physics.Raycast(transform.position, altDir, detectionRadius, LayerMask.GetMask("Obstacle")))
+                {
+                    return altDir * avoidanceStrength;
+                }
             }
         }
 
