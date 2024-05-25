@@ -31,5 +31,16 @@ public class UI : MonoBehaviour
 
         Button deleteButton = root.Q<Button>("deleteButton");
         deleteButton.clicked += () => gridData.startDeleteMode();
+
+        Button startButton = root.Q<Button>("startButton");
+        startButton.clicked += () => {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            
+            foreach(GameObject enemy in enemies)
+            {
+                enemy.GetComponent<EnemyMovement>().canStart = true;
+
+            }
+        };
     }
 }
