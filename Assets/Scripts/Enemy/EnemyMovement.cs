@@ -4,8 +4,8 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public float speed = 5f;
-    public float detectionRadius = 1f;  // Radius to detect obstacles
-    public float avoidanceStrength = 2f;  // Strength of avoidance maneuver
+    public float detectionRadius = 1f; // Radius to detect obstacles
+    public float avoidanceStrength = 2f; // Strength of avoidance maneuver
     public bool canStart = false;
 
     private Transform target;
@@ -14,6 +14,7 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        this.speed = Random.Range(3f, 7f);
     }
 
     void Update()
@@ -34,7 +35,10 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (GameObject potentialTarget in targets)
         {
-            float distance = Vector3.Distance(transform.position, potentialTarget.transform.position);
+            float distance = Vector3.Distance(
+                transform.position,
+                potentialTarget.transform.position
+            );
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;
@@ -64,16 +68,19 @@ public class EnemyMovement : MonoBehaviour
             if (obstacle.CompareTag("Obstacle"))
             {
                 Vector3 directionToObstacle = transform.position - obstacle.transform.position;
-                avoidance += directionToObstacle / directionToObstacle.sqrMagnitude;  // Weighted by distance
+                avoidance += directionToObstacle / directionToObstacle.sqrMagnitude; // Weighted by distance
             }
         }
 
         // Check if avoidance is zero and try alternative directions
         if (avoidance == Vector3.zero)
         {
-            Vector3[] alternativeDirections = {
-                transform.right, -transform.right,
-                transform.forward, -transform.forward,
+            Vector3[] alternativeDirections =
+            {
+                transform.right,
+                -transform.right,
+                transform.forward,
+                -transform.forward,
                 (transform.right + transform.forward).normalized,
                 (-transform.right + transform.forward).normalized,
                 (transform.right - transform.forward).normalized,
@@ -82,7 +89,14 @@ public class EnemyMovement : MonoBehaviour
 
             foreach (var altDir in alternativeDirections)
             {
-                if (!Physics.Raycast(transform.position, altDir, detectionRadius, LayerMask.GetMask("Obstacle")))
+                if (
+                    !Physics.Raycast(
+                        transform.position,
+                        altDir,
+                        detectionRadius,
+                        LayerMask.GetMask("Obstacle")
+                    )
+                )
                 {
                     return altDir * avoidanceStrength;
                 }
@@ -100,7 +114,7 @@ public class EnemyMovement : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Target"))
+        if (collision.gameObject.CompareTag("Target"))
         {
             Destroy(gameObject);
         }
