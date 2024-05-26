@@ -17,12 +17,15 @@ public abstract class ObjectData : MonoBehaviour
     public GameObject Prefab { get; set; }
     public LayoutData Shape { get; set; } // Grid layout, with pivot on 0,0
     public int currentRotation { get; set; } // deg
+    public bool occupiesCells { get; set; }
 
-    public ObjectData(string objectName, LayoutData shape)
+    public ObjectData(string objectName, LayoutData shape, bool occupiesCells = false)
     {
         this.Id = Guid.NewGuid().ToString();
         this.ObjectName = objectName;
         this.Shape = shape;
+        this.currentRotation = 0;
+        this.occupiesCells = occupiesCells;
     }
 
     public int rotate()
