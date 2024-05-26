@@ -5,76 +5,83 @@ public class EnemyMovement : MonoBehaviour
 {
     public float speed = 5f;
     public bool canStart = false;
+    public int damage = 1;
+    public int health = 10;
 
     // Algorithm Vars
     private List<Vector3> path;
     private int targetIndex;
-    public Grid grid;
+    private Grid grid;
 
-    private Transform target;
+    private GameObject target;
     private Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         target = FindNearestTarget();
-        GameObject test = GameObject.Find("GridData");
-        grid = test.GetComponent<Grid>();
+        GameObject gridData = GameObject.Find("GridData");
+        grid = gridData.GetComponent<Grid>();
 
-
-        this.speed = Random.Range(3f, 7f);
+        speed = Random.Range(3f, 7f);
     }
 
     void Update()
     {
-        // If there is no target, get one!
-        if (target == null)
+        // Check if the current target is still active
+        if (target == null || !target.activeInHierarchy)
         {
             target = FindNearestTarget();
+            path = null;  // Reset the path so it can be recalculated
         }
 
-        // If there is no path yet and we can start, then determine path
-        if (target != null && grid != null && canStart == true && path == null)
+        if (target != null && grid != null && canStart && path == null)
         {
-            Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, this.grid);
-            Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(target.position, this.grid);
-            List<Vector3Int> intPath = Pathfinding.Instance.FindPath(gridPos, targetGridPos);
-            path = new List<Vector3>();
-            foreach (Vector3Int pos in intPath)
-            {
-                path.Add((Vector3)pos);
-            }
-            targetIndex = 0;
+            CalculatePath();
         }
+    }
 
-        // If there is a path and a target get moving
-        if (target != null && canStart == true && path != null)
+    void FixedUpdate()
+    {
+        if (target != null && canStart && path != null)
         {
             MoveTowardsTarget();
         }
-
     }
 
-    Transform FindNearestTarget()
+    GameObject FindNearestTarget()
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag("Target");
-        Transform nearestTarget = null;
+        GameObject nearestTarget = null;
         float shortestDistance = Mathf.Infinity;
 
         foreach (GameObject potentialTarget in targets)
         {
-            float distance = Vector3.Distance(
-                transform.position,
-                potentialTarget.transform.position
-            );
-            if (distance < shortestDistance)
+            if (potentialTarget.activeInHierarchy)  // Only consider active targets
             {
-                shortestDistance = distance;
-                nearestTarget = potentialTarget.transform;
+                float distance = Vector3.Distance(transform.position, potentialTarget.transform.position);
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    nearestTarget = potentialTarget;
+                }
             }
         }
 
         return nearestTarget;
+    }
+
+    void CalculatePath()
+    {
+        Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, grid);
+        Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(target.transform.position, grid);
+        List<Vector3Int> intPath = Pathfinding.Instance.FindPath(gridPos, targetGridPos);
+        path = new List<Vector3>();
+        foreach (Vector3Int pos in intPath)
+        {
+            path.Add((Vector3)pos);
+        }
+        targetIndex = 0;
     }
 
     void MoveTowardsTarget()
@@ -83,20 +90,36 @@ public class EnemyMovement : MonoBehaviour
         {
             Vector3 targetPosition = path[targetIndex];
             Vector3 direction = (targetPosition - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
+            rb.MovePosition(transform.position + direction * speed * Time.fixedDeltaTime);
 
             if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
             {
                 targetIndex++;
             }
         }
+
+        if (Vector3.Distance(transform.position, path[path.Count - 1]) < 0.5f && target != null)
+        {
+            DamageTarget();
+            gameObject.SetActive(false);
+        }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void DamageTarget()
     {
-        if (collision.gameObject.CompareTag("Target"))
+        TowerController tc = target.GetComponent<TowerController>();
+        if (tc != null)
         {
-            Destroy(gameObject);
+            tc.TakeDamage(damage);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            gameObject.SetActive(false);
         }
     }
 }
