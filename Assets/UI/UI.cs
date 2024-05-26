@@ -41,6 +41,7 @@ public class UI : MonoBehaviour
                 enemy.GetComponent<EnemyMovement>().canStart = true;
 
             }
+            gridData.endBuildMode();
         };
     }
 }
