@@ -21,7 +21,8 @@ public class EnemyMovement : MonoBehaviour
         GameObject test = GameObject.Find("GridData");
         grid = test.GetComponent<Grid>();
 
-        
+
+        this.speed = Random.Range(3f, 7f);
     }
 
     void Update()
@@ -33,13 +34,13 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // If there is no path yet and we can start, then determine path
-        if (target != null && grid != null && canStart == true && path == null) 
+        if (target != null && grid != null && canStart == true && path == null)
         {
             Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, this.grid);
             Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(target.position, this.grid);
             List<Vector3Int> intPath = Pathfinding.Instance.FindPath(gridPos, targetGridPos);
             path = new List<Vector3>();
-            foreach (Vector3Int pos in intPath) 
+            foreach (Vector3Int pos in intPath)
             {
                 path.Add((Vector3)pos);
             }
@@ -51,7 +52,7 @@ public class EnemyMovement : MonoBehaviour
         {
             MoveTowardsTarget();
         }
-        
+
     }
 
     Transform FindNearestTarget()
@@ -62,7 +63,10 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (GameObject potentialTarget in targets)
         {
-            float distance = Vector3.Distance(transform.position, potentialTarget.transform.position);
+            float distance = Vector3.Distance(
+                transform.position,
+                potentialTarget.transform.position
+            );
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;
@@ -75,7 +79,7 @@ public class EnemyMovement : MonoBehaviour
 
     void MoveTowardsTarget()
     {
-        if(path != null && targetIndex < path.Count)
+        if (path != null && targetIndex < path.Count)
         {
             Vector3 targetPosition = path[targetIndex];
             Vector3 direction = (targetPosition - transform.position).normalized;
@@ -90,7 +94,7 @@ public class EnemyMovement : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Target"))
+        if (collision.gameObject.CompareTag("Target"))
         {
             Destroy(gameObject);
         }

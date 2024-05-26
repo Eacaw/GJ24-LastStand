@@ -8,6 +8,7 @@ public class UI : MonoBehaviour
     // public PlacementSystem placementSystem;
     public GridData gridData;
     public ObjectDatabaseController objectDatabaseController;
+    public CameraController cameraController;
 
     private void OnEnable()
     {
@@ -32,14 +33,20 @@ public class UI : MonoBehaviour
         Button deleteButton = root.Q<Button>("deleteButton");
         deleteButton.clicked += () => gridData.startDeleteMode();
 
+        Button RotateLeft = root.Q<Button>("RotateLeft");
+        RotateLeft.clicked += () => cameraController.RotateCameraLeft();
+
+        Button RotateRight = root.Q<Button>("RotateRight");
+        RotateRight.clicked += () => cameraController.RotateCameraRight();
+
         Button startButton = root.Q<Button>("startButton");
-        startButton.clicked += () => {
+        startButton.clicked += () =>
+        {
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            
-            foreach(GameObject enemy in enemies)
+
+            foreach (GameObject enemy in enemies)
             {
                 enemy.GetComponent<EnemyMovement>().canStart = true;
-
             }
             gridData.endBuildMode();
         };
