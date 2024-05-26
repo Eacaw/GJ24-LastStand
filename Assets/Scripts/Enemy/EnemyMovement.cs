@@ -7,6 +7,7 @@ public class EnemyMovement : MonoBehaviour
     public bool canStart = false;
     public int damage = 1;
     public int health = 10;
+    public float damageInterval = 1f;  // Time interval between damage applications
 
     // Algorithm Vars
     private List<Vector3> path;
@@ -15,6 +16,7 @@ public class EnemyMovement : MonoBehaviour
 
     private GameObject target;
     private Rigidbody rb;
+    private float damageCooldown;
 
     void Start()
     {
@@ -24,6 +26,7 @@ public class EnemyMovement : MonoBehaviour
         grid = gridData.GetComponent<Grid>();
 
         speed = Random.Range(3f, 7f);
+        damageCooldown = 0f;
     }
 
     void Update()
@@ -39,6 +42,8 @@ public class EnemyMovement : MonoBehaviour
         {
             CalculatePath();
         }
+
+        damageCooldown -= Time.deltaTime;
     }
 
     void FixedUpdate()
@@ -46,6 +51,13 @@ public class EnemyMovement : MonoBehaviour
         if (target != null && canStart && path != null)
         {
             MoveTowardsTarget();
+
+            // Deal damage if in range and cooldown has elapsed
+            if (damageCooldown <= 0f && Vector3.Distance(transform.position, target.transform.position) <= 0.5f)
+            {
+                DamageTarget();
+                damageCooldown = damageInterval;  // Reset cooldown
+            }
         }
     }
 
@@ -98,10 +110,14 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        if (Vector3.Distance(transform.position, path[path.Count - 1]) < 0.5f && target != null)
+        // Damage target and deactivate if at the final position
+        if (path != null && targetIndex >= path.Count && target != null)
         {
-            DamageTarget();
-            gameObject.SetActive(false);
+            if (damageCooldown <= 0f)
+            {
+                DamageTarget();
+                damageCooldown = damageInterval;  // Reset cooldown
+            }
         }
     }
 
@@ -116,6 +132,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Debug.Log("Enemy -1");
         health -= damage;
         if (health <= 0)
         {
