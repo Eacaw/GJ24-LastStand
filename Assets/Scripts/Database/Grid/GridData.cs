@@ -220,4 +220,10 @@ public class GridData : MonoBehaviour
         }
         return true;
     }
+
+    public bool isPositionOccupied(Vector2Int gridPosition)
+    {
+        bool result = false;
+        return gridOccupied.TryGetValue(gridPosition, out result);
+    }
 }
