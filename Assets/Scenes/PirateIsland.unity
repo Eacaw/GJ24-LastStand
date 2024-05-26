@@ -233,13 +233,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38751557, y: 0, z: 0, w: 0.9218632}
-  m_LocalPosition: {x: 0, y: 9.6, z: -12}
+  m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
+  m_LocalPosition: {x: 0, y: 13.5, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45.6, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 55, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,12 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdb231bd34a3f614e9927d58276c5c30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 5
-  scrollSpeed: 5
-  minY: 1
-  maxY: 20
-  rotationSpeed: 5
-  panLimit: {x: 11.5, y: 7}
+  rotation: 0
 --- !u!4 &334221554 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4b33c1848b0858a4baa9483e9a24fc1a,
@@ -914,6 +909,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridData: {fileID: 1140685419}
   objectDatabaseController: {fileID: 1487026736}
+  cameraController: {fileID: 330585548}
 --- !u!114 &813827899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1682,7 +1678,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e65a7d2add7cc84ca473e0d0f2706af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 20, y: 12}
+  gridSize: {x: 20, y: 25}
   gridPreviewPrefab: {fileID: 2706230884323932871, guid: eb8f484303638e84393cf2cb401ede4b,
     type: 3}
   objectDatabaseController: {fileID: 1487026736}

@@ -8,4 +8,6 @@
         <ui:Button text="Delete" parse-escape-sequences="false" display-tooltip-when-elided="true" name="deleteButton" class="objectButton" style="background-color: rgb(149, 96, 111);" />
         <ui:Button text="Start" parse-escape-sequences="false" display-tooltip-when-elided="true" name="startButton" class="objectButton" />
     </ui:VisualElement>
+    <ui:Button text="Rotate Camera Left" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RotateLeft" style="bottom: 40px; left: 40px; position: absolute; width: 80px; height: 80px; white-space: normal; background-color: rgb(13, 213, 255); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;" />
+    <ui:Button text="Rotate Camera Right" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RotateRight" style="bottom: 40px; left: auto; position: absolute; width: 80px; height: 80px; white-space: normal; background-color: rgb(13, 213, 255); right: 40px; border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;" />
 </ui:UXML>
