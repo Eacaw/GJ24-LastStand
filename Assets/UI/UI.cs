@@ -26,10 +26,6 @@ public class UI : MonoBehaviour
         string tableId = objectDatabaseController.GetObjectDataByName("Table").Id;
         tableButton.clicked += () => gridData.startBuildMode(tableId);
 
-        Button beltButton = root.Q<Button>("beltButton");
-        string beltId = objectDatabaseController.GetObjectDataByName("Conveyor").Id;
-        beltButton.clicked += () => gridData.startBuildMode(beltId);
-
         Button deleteButton = root.Q<Button>("deleteButton");
         deleteButton.clicked += () => gridData.startDeleteMode();
 
