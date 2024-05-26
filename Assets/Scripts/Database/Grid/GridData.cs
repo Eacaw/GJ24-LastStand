@@ -29,6 +29,7 @@ public class GridData : MonoBehaviour
     private InputManager inputManager;
 
     public Dictionary<Vector2Int, bool> gridOccupied = new Dictionary<Vector2Int, bool>();
+    public Dictionary<Vector2Int, bool> gridPathOccupied = new Dictionary<Vector2Int, bool>();
     public Dictionary<Vector2Int, string> objectIdMap = new Dictionary<Vector2Int, string>();
 
     [SerializeField]
@@ -121,6 +122,10 @@ public class GridData : MonoBehaviour
             foreach (Vector2Int cell in occupiedCells)
             {
                 gridOccupied.Add(cell, true);
+                if (objectData.occupiesCells)
+                {
+                    gridPathOccupied.Add(cell, true);
+                }
             }
 
             if (!objectPlaced)
@@ -219,5 +224,11 @@ public class GridData : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public bool isPositionOccupied(Vector2Int gridPosition)
+    {
+        bool result = false;
+        return gridPathOccupied.TryGetValue(gridPosition, out result);
     }
 }

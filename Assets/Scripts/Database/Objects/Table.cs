@@ -7,5 +7,5 @@ using UnityEngine;
 public class Table : ObjectData
 {
     public Table()
-        : base("Table", Layouts.get1x2Layout()) { }
+        : base("Table", Layouts.get1x2Layout(), true) { }
 }

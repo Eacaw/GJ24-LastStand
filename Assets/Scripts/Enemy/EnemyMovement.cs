@@ -4,9 +4,12 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public float speed = 5f;
-    public float detectionRadius = 1f; // Radius to detect obstacles
-    public float avoidanceStrength = 2f; // Strength of avoidance maneuver
     public bool canStart = false;
+
+    // Algorithm Vars
+    private List<Vector3> path;
+    private int targetIndex;
+    public Grid grid;
 
     private Transform target;
     private Rigidbody rb;
@@ -14,17 +17,42 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        target = FindNearestTarget();
+        GameObject test = GameObject.Find("GridData");
+        grid = test.GetComponent<Grid>();
+
+
         this.speed = Random.Range(3f, 7f);
     }
 
     void Update()
     {
-        target = FindNearestTarget();
+        // If there is no target, get one!
+        if (target == null)
+        {
+            target = FindNearestTarget();
+        }
 
-        if (target != null && canStart == true)
+        // If there is no path yet and we can start, then determine path
+        if (target != null && grid != null && canStart == true && path == null)
+        {
+            Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, this.grid);
+            Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(target.position, this.grid);
+            List<Vector3Int> intPath = Pathfinding.Instance.FindPath(gridPos, targetGridPos);
+            path = new List<Vector3>();
+            foreach (Vector3Int pos in intPath)
+            {
+                path.Add((Vector3)pos);
+            }
+            targetIndex = 0;
+        }
+
+        // If there is a path and a target get moving
+        if (target != null && canStart == true && path != null)
         {
             MoveTowardsTarget();
         }
+
     }
 
     Transform FindNearestTarget()
@@ -51,65 +79,17 @@ public class EnemyMovement : MonoBehaviour
 
     void MoveTowardsTarget()
     {
-        Vector3 direction = (target.position - transform.position).normalized;
-        Vector3 avoidanceDirection = GetAvoidanceDirection();
-        Vector3 moveDirection = (direction + avoidanceDirection).normalized;
-
-        rb.MovePosition(transform.position + moveDirection * speed * Time.deltaTime);
-    }
-
-    Vector3 GetAvoidanceDirection()
-    {
-        Vector3 avoidance = Vector3.zero;
-        Collider[] obstacles = Physics.OverlapSphere(transform.position, detectionRadius);
-
-        foreach (Collider obstacle in obstacles)
+        if (path != null && targetIndex < path.Count)
         {
-            if (obstacle.CompareTag("Obstacle"))
+            Vector3 targetPosition = path[targetIndex];
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
+
+            if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
             {
-                Vector3 directionToObstacle = transform.position - obstacle.transform.position;
-                avoidance += directionToObstacle / directionToObstacle.sqrMagnitude; // Weighted by distance
+                targetIndex++;
             }
         }
-
-        // Check if avoidance is zero and try alternative directions
-        if (avoidance == Vector3.zero)
-        {
-            Vector3[] alternativeDirections =
-            {
-                transform.right,
-                -transform.right,
-                transform.forward,
-                -transform.forward,
-                (transform.right + transform.forward).normalized,
-                (-transform.right + transform.forward).normalized,
-                (transform.right - transform.forward).normalized,
-                (-transform.right - transform.forward).normalized
-            };
-
-            foreach (var altDir in alternativeDirections)
-            {
-                if (
-                    !Physics.Raycast(
-                        transform.position,
-                        altDir,
-                        detectionRadius,
-                        LayerMask.GetMask("Obstacle")
-                    )
-                )
-                {
-                    return altDir * avoidanceStrength;
-                }
-            }
-        }
-
-        return avoidance * avoidanceStrength;
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 
     void OnCollisionEnter(Collision collision)
