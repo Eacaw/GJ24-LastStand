@@ -110,13 +110,13 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Distance: 5
+    - _Distance: 14
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FoamAmount: 2
-    - _FoamCutoff: 0.91
-    - _FoamSpeed: 0.2
+    - _FoamAmount: 2.08
+    - _FoamCutoff: 0.9
+    - _FoamSpeed: 2
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -127,7 +127,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _RefractionSpeed: 0.1
-    - _RefractionStrength: 0.05
+    - _RefractionStrength: 0.5
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
