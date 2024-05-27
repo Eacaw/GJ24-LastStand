@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class TowerController : MonoBehaviour
 {
-    public int health = 2;  // Initial health of the tower
-    public int damage = 1;  // Damage amount to be dealt to the enemy
-    public float range = 2f;  // Range within which the tower deals damage to enemies
-    public float damageInterval = 1f;  // Time interval between damage applications
+    public int health = 2; // Initial health of the tower
+    public int damage = 1; // Damage amount to be dealt to the enemy
+    public float range = 2f; // Range within which the tower deals damage to enemies
+    public float damageInterval = 1f; // Time interval between damage applications
     public bool isObstacle = false;
 
     void Start()
@@ -63,12 +63,11 @@ public class TowerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Tower Damage");
         health -= damage;
 
         if (health <= 0)
         {
-            gameObject.SetActive(false);  // Deactivate the tower instead of destroying it
+            gameObject.SetActive(false); // Deactivate the tower instead of destroying it
         }
     }
 
@@ -81,7 +80,6 @@ public class TowerController : MonoBehaviour
         {
             if (enemy.CompareTag("Enemy"))
             {
-
                 if (animator != null)
                 {
                     animator.SetTrigger("Attack");
