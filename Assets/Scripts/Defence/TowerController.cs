@@ -1,10 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerController : MonoBehaviour
 {
-    public int health = 2; // Initial health of the target
-    public int damage = 1;
+    public int health = 2;  // Initial health of the tower
+    public int damage = 1;  // Damage amount to be dealt to the enemy
+    public float range = 2f;  // Range within which the tower deals damage to enemies
+    public float damageInterval = 1f;  // Time interval between damage applications
     public bool isObstacle = false;
+
+    void Start()
+    {
+        damageCooldown = 0f;
+    }
 
     void Update()
     {
@@ -20,6 +28,14 @@ public class TowerController : MonoBehaviour
                     rotation,
                     Time.deltaTime * 2
                 );
+            }
+
+            damageCooldown -= Time.deltaTime;
+
+            if (damageCooldown <= 0f)
+            {
+                DealDamageToEnemiesInRange();
+                damageCooldown = damageInterval;
             }
         }
     }
@@ -43,26 +59,43 @@ public class TowerController : MonoBehaviour
         return nearestEnemy;
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Animator animator = collision.gameObject.GetComponent<Animator>();
-            if (animator != null)
-            {
-                animator.SetTrigger("Attack");
-            }
-            TakeDamage(); // Decrease health by 1 when collided with an enemy
-        }
-    }
+    private float damageCooldown;
 
-    void TakeDamage()
+    public void TakeDamage(int damage)
     {
+        Debug.Log("Tower Damage");
         health -= damage;
 
         if (health <= 0)
         {
-            Destroy(gameObject); // Remove the object when health reaches 0
+            gameObject.SetActive(false);  // Deactivate the tower instead of destroying it
+        }
+    }
+
+    void DealDamageToEnemiesInRange()
+    {
+        Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range);
+        Animator animator = gameObject.GetComponent<Animator>();
+
+        foreach (Collider enemy in enemiesInRange)
+        {
+            if (enemy.CompareTag("Enemy"))
+            {
+
+                if (animator != null)
+                {
+                    animator.SetTrigger("Attack");
+                }
+                EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
+                if (enemyMovement != null)
+                {
+                    enemyMovement.TakeDamage(damage);
+                }
+            }
+            else
+            {
+                animator.ResetTrigger("Attack");
+            }
         }
     }
 }

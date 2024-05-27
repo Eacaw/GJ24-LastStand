@@ -109,7 +109,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   canStart: 1
-  grid: {fileID: 0}
+  damage: 10
+  health: 50
+  damageInterval: 1
 --- !u!54 &5966855156834524328
 Rigidbody:
   m_ObjectHideFlags: 0

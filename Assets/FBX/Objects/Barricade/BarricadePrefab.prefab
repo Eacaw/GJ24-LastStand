@@ -136,6 +136,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 2
   damage: 1
+  range: 2
+  damageInterval: 1
   isObstacle: 1
 --- !u!65 &1219641448953501823
 BoxCollider:
@@ -157,7 +159,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 21.098694, y: 9.328106, z: 9.216053}
-  m_Center: {x: 5.1165915, y: 4.164052, z: 0.20830661}
+  m_Center: {x: -5.02, y: 4.164052, z: 0.20830661}
 --- !u!54 &3028407498975640926
 Rigidbody:
   m_ObjectHideFlags: 0
