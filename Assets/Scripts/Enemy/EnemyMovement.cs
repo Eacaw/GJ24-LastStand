@@ -97,15 +97,27 @@ public class EnemyMovement : MonoBehaviour
 
     void CalculatePath()
     {
-        Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, grid);
-        Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(target.transform.position, grid);
+        Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, this.grid);
+        Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(
+            target.transform.position,
+            this.grid
+        );
         List<Vector3Int> intPath = Pathfinding.Instance.FindPath(gridPos, targetGridPos);
         path = new List<Vector3>();
-        foreach (Vector3Int pos in intPath)
+        if (intPath != null)
         {
-            path.Add((Vector3)pos);
+            foreach (Vector3Int pos in intPath)
+            {
+                path.Add((Vector3)pos);
+            }
+            targetIndex = 0;
         }
-        targetIndex = 0;
+        else
+        {
+            path = null;
+            target = FindNearestTarget();
+            MoveTowardsTarget(target.transform.position);
+        }
     }
 
     void MoveTowardsTarget()
@@ -124,13 +136,25 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // Damage target and deactivate if at the final position
-        if (path != null && targetIndex >= path.Count && target != null)
+        if (path != null && targetIndex >= (path.Count - 1) && target != null)
         {
             if (damageCooldown <= 0f)
             {
                 DamageTarget();
                 damageCooldown = damageInterval;  // Reset cooldown
             }
+        }
+    }
+
+    void MoveTowardsTarget(Vector3 targetPosition)
+    {
+        animator.SetBool("isWalking", true);
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        transform.position += direction * speed * Time.deltaTime;
+
+        if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
+        {
+            targetIndex++;
         }
     }
 
