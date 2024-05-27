@@ -175,7 +175,6 @@ public class EnemyMovement : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Enemy -1");
         health -= damage;
         if (health <= 0)
         {

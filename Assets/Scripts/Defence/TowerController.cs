@@ -63,7 +63,6 @@ public class TowerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Tower Damage");
         health -= damage;
 
         if (health <= 0)
