@@ -9,6 +9,11 @@ public class TowerController : MonoBehaviour
     public float damageInterval = 1f;  // Time interval between damage applications
     public bool isObstacle = false;
 
+    void Start()
+    {
+        damageCooldown = 0f;
+    }
+
     void Update()
     {
         if (!isObstacle)
@@ -23,6 +28,14 @@ public class TowerController : MonoBehaviour
                     rotation,
                     Time.deltaTime * 2
                 );
+            }
+
+            damageCooldown -= Time.deltaTime;
+
+            if (damageCooldown <= 0f)
+            {
+                DealDamageToEnemiesInRange();
+                damageCooldown = damageInterval;
             }
         }
     }
@@ -48,28 +61,6 @@ public class TowerController : MonoBehaviour
 
     private float damageCooldown;
 
-    void Start()
-    {
-        damageCooldown = 0f;
-    }
-
-    void Update()
-    {
-        damageCooldown -= Time.deltaTime;
-
-        if (damageCooldown <= 0f)
-        {
-            DealDamageToEnemiesInRange();
-            damageCooldown = damageInterval;
-
-            Animator animator = collision.gameObject.GetComponent<Animator>();
-            if (animator != null)
-            {
-                animator.SetTrigger("Attack");
-            }
-        }
-    }
-
     public void TakeDamage(int damage)
     {
         Debug.Log("Tower Damage");
@@ -84,16 +75,26 @@ public class TowerController : MonoBehaviour
     void DealDamageToEnemiesInRange()
     {
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range);
+        Animator animator = gameObject.GetComponent<Animator>();
 
         foreach (Collider enemy in enemiesInRange)
         {
             if (enemy.CompareTag("Enemy"))
             {
+
+                if (animator != null)
+                {
+                    animator.SetTrigger("Attack");
+                }
                 EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
                 if (enemyMovement != null)
                 {
                     enemyMovement.TakeDamage(damage);
                 }
+            }
+            else
+            {
+                animator.ResetTrigger("Attack");
             }
         }
     }
