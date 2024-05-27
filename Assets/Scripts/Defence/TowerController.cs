@@ -90,6 +90,10 @@ public class TowerController : MonoBehaviour
                     enemyMovement.TakeDamage(damage);
                 }
             }
+            else
+            {
+                animator.ResetTrigger("Attack");
+            }
         }
     }
 }
