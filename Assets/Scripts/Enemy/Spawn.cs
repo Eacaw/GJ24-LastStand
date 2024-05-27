@@ -12,7 +12,6 @@ public class Spawn : MonoBehaviour
 
     public bool canStart = false;
 
-    private float timer = 0f;
 
     private Vector3[] spawnPoints;
 
