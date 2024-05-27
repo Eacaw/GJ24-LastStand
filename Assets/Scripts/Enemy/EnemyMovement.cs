@@ -7,8 +7,7 @@ public class EnemyMovement : MonoBehaviour
     public bool canStart = true;
     public int damage = 1;
     public int health = 10;
-    public float damageInterval = 1f;  // Time interval between damage applications
-
+    public float damageInterval = 1f; // Time interval between damage applications
 
     // Algorithm Vars
     private List<Vector3> path;
@@ -27,7 +26,6 @@ public class EnemyMovement : MonoBehaviour
         target = FindNearestTarget();
         GameObject gridData = GameObject.Find("GridData");
         grid = gridData.GetComponent<Grid>();
-        this.speed = Random.Range(3f, 7f);
         damageCooldown = 0f;
         animator = GetComponent<Animator>();
     }
@@ -38,7 +36,7 @@ public class EnemyMovement : MonoBehaviour
         if (target == null || !target.activeInHierarchy)
         {
             target = FindNearestTarget();
-            path = null;  // Reset the path so it can be recalculated
+            path = null; // Reset the path so it can be recalculated
         }
 
         if (target != null && grid != null && canStart && path == null)
@@ -65,10 +63,13 @@ public class EnemyMovement : MonoBehaviour
             MoveTowardsTarget();
 
             // Deal damage if in range and cooldown has elapsed
-            if (damageCooldown <= 0f && Vector3.Distance(transform.position, target.transform.position) <= 0.5f)
+            if (
+                damageCooldown <= 0f
+                && Vector3.Distance(transform.position, target.transform.position) <= 0.5f
+            )
             {
                 DamageTarget();
-                damageCooldown = damageInterval;  // Reset cooldown
+                damageCooldown = damageInterval; // Reset cooldown
             }
         }
     }
@@ -81,9 +82,12 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (GameObject potentialTarget in targets)
         {
-            if (potentialTarget.activeInHierarchy)  // Only consider active targets
+            if (potentialTarget.activeInHierarchy) // Only consider active targets
             {
-                float distance = Vector3.Distance(transform.position, potentialTarget.transform.position);
+                float distance = Vector3.Distance(
+                    transform.position,
+                    potentialTarget.transform.position
+                );
                 if (distance < shortestDistance)
                 {
                     shortestDistance = distance;
@@ -141,7 +145,7 @@ public class EnemyMovement : MonoBehaviour
             if (damageCooldown <= 0f)
             {
                 DamageTarget();
-                damageCooldown = damageInterval;  // Reset cooldown
+                damageCooldown = damageInterval; // Reset cooldown
             }
         }
     }
@@ -175,7 +179,7 @@ public class EnemyMovement : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }
