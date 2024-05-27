@@ -44,7 +44,7 @@ public class TowerController : MonoBehaviour
         }
     }
 
-    public void TowerPlaced()
+    public bool TowerPlaced()
     {
         GameObject player = GameObject.Find("PlayerController");
         if (player != null)
@@ -58,8 +58,10 @@ public class TowerController : MonoBehaviour
                 Debug.Log("Not enough currency to place tower.");
                 // gameObject.SetActive(false);  // Deactivate the tower if not enough currency
                 Destroy(gameObject);
+                return false;
             }
         }
+        return true;
     }
 
     GameObject FindNearestEnemy()
