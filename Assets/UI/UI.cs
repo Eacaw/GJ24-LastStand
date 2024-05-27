@@ -26,9 +26,9 @@ public class UI : MonoBehaviour
         string ironMaryId = objectDatabaseController.GetObjectDataByName("IronMary").Id;
         IronMaryButton.clicked += () => gridData.startBuildMode(ironMaryId);
 
-        Button BarricadeButton = root.Q<Button>("BarricadeButton");
-        string barricadeId = objectDatabaseController.GetObjectDataByName("Barricade").Id;
-        BarricadeButton.clicked += () => gridData.startBuildMode(barricadeId);
+        // Button BarricadeButton = root.Q<Button>("BarricadeButton");
+        // string barricadeId = objectDatabaseController.GetObjectDataByName("Barricade").Id;
+        // BarricadeButton.clicked += () => gridData.startBuildMode(barricadeId);
 
         Button deleteButton = root.Q<Button>("deleteButton");
         deleteButton.clicked += () => gridData.startDeleteMode();
