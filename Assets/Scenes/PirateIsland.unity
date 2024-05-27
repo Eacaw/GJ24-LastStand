@@ -2780,6 +2780,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1187763062}
   - component: {fileID: 1187763061}
+  - component: {fileID: 1187763063}
   m_Layer: 0
   m_Name: SpawnController
   m_TagString: Untagged
@@ -2799,12 +2800,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef60c8c4e7eda324abcc1833f914a73c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 4609691834729952156, guid: 00c8d4e71e795764fb23e3c8fc29490c,
-    type: 3}
+  enemyPrefabs:
+  - {fileID: 4609691834729952156, guid: 00c8d4e71e795764fb23e3c8fc29490c, type: 3}
+  - {fileID: 4082520335596737710, guid: ae49abadbe4b56240ba3af91cf187b77, type: 3}
+  - {fileID: 2565949385458423277, guid: 73caffe31f9d29d419efae6031123ae3, type: 3}
+  - {fileID: 3002081880999876551, guid: f3319b4cf5844b5499536d48d2fe12a6, type: 3}
   spawnInterval: 1
-  maxEnemies: 10
+  maxEnemies: 100
   enemiesSpawned: 0
   canStart: 0
+  currentWave: 0
+  UIDocument: {fileID: 813827899}
 --- !u!4 &1187763062
 Transform:
   m_ObjectHideFlags: 0
@@ -2820,6 +2826,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1187763063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187763060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c1b4ce999688c4090b0d4d7b0c726d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waveCount: 50
 --- !u!1001 &1189872175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3305,6 +3324,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 2
   damage: 1
+  range: 2
+  damageInterval: 1
   isObstacle: 1
 --- !u!114 &1251634351
 MonoBehaviour:
