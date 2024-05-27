@@ -110,11 +110,11 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Distance: 14
+    - _Distance: 15
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FoamAmount: 2
+    - _FoamAmount: 1.03
     - _FoamAngleOffset: 1
     - _FoamCellDensity: 1
     - _FoamCutoff: 0.98
