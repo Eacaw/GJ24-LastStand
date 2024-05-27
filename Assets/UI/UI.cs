@@ -9,6 +9,7 @@ public class UI : MonoBehaviour
     public GridData gridData;
     public ObjectDatabaseController objectDatabaseController;
     public CameraController cameraController;
+    public Spawn spawncontroller;
 
     private void OnEnable()
     {
@@ -26,9 +27,9 @@ public class UI : MonoBehaviour
         string ironMaryId = objectDatabaseController.GetObjectDataByName("IronMary").Id;
         IronMaryButton.clicked += () => gridData.startBuildMode(ironMaryId);
 
-        // Button BarricadeButton = root.Q<Button>("BarricadeButton");
-        // string barricadeId = objectDatabaseController.GetObjectDataByName("Barricade").Id;
-        // BarricadeButton.clicked += () => gridData.startBuildMode(barricadeId);
+        Button BarricadeButton = root.Q<Button>("Barricade");
+        string barricadeId = objectDatabaseController.GetObjectDataByName("Barricade").Id;
+        BarricadeButton.clicked += () => gridData.startBuildMode(barricadeId);
 
         Button deleteButton = root.Q<Button>("deleteButton");
         deleteButton.clicked += () => gridData.startDeleteMode();
@@ -42,8 +43,8 @@ public class UI : MonoBehaviour
         Button startButton = root.Q<Button>("startButton");
         startButton.clicked += () =>
         {
+            spawncontroller.canStart = true;
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
             foreach (GameObject enemy in enemies)
             {
                 enemy.GetComponent<EnemyMovement>().canStart = true;
