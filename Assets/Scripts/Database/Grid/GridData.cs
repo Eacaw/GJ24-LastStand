@@ -117,6 +117,12 @@ public class GridData : MonoBehaviour
             );
 
             GameObject gameObject = objectData.getGameObject(worldCellCenter);
+            TowerController tc = gameObject.GetComponent<TowerController>();
+            bool hasEnoughCurrency = tc.TowerPlaced();
+            if (!hasEnoughCurrency)
+            {
+                return;
+            }
             bool objectPlaced = this.grid3DObjects.addObject(gridPos, occupiedCells, gameObject);
             this.objectIdMap.Add(gridPos, this.currentObjectId);
             foreach (Vector2Int cell in occupiedCells)

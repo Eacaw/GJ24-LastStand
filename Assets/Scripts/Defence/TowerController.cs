@@ -8,6 +8,11 @@ public class TowerController : MonoBehaviour
     public float range = 2f; // Range within which the tower deals damage to enemies
     public float damageInterval = 1f; // Time interval between damage applications
     public bool isObstacle = false;
+    public int cost = 5; // Cost to place the tower
+    public int maxTargets = 1; // Maximum number of enemies the tower can damage at once
+
+    private float damageCooldown;
+    private PlayerController playerController;
 
     void Start()
     {
@@ -40,6 +45,24 @@ public class TowerController : MonoBehaviour
         }
     }
 
+    public bool TowerPlaced()
+    {
+        GameObject player = GameObject.Find("PlayerController");
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+
+            // Subtract cost from player currency when tower is placed
+            if (playerController != null && !playerController.SubtractCurrency(cost))
+            {
+                Debug.Log("Not enough currency to place tower.");
+                Destroy(gameObject);
+                return false;
+            }
+        }
+        return true;
+    }
+
     GameObject FindNearestEnemy()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -59,15 +82,13 @@ public class TowerController : MonoBehaviour
         return nearestEnemy;
     }
 
-    private float damageCooldown;
-
     public void TakeDamage(int damage)
     {
         health -= damage;
 
         if (health <= 0)
         {
-            gameObject.SetActive(false); // Deactivate the tower instead of destroying it
+            Destroy(gameObject);
         }
     }
 
@@ -76,9 +97,11 @@ public class TowerController : MonoBehaviour
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range);
         Animator animator = gameObject.GetComponent<Animator>();
 
+        int targetsDamaged = 0;
+
         foreach (Collider enemy in enemiesInRange)
         {
-            if (enemy.CompareTag("Enemy"))
+            if (enemy.CompareTag("Enemy") && targetsDamaged < maxTargets)
             {
                 if (animator != null)
                 {
@@ -88,12 +111,14 @@ public class TowerController : MonoBehaviour
                 if (enemyMovement != null)
                 {
                     enemyMovement.TakeDamage(damage);
+                    targetsDamaged++;
                 }
             }
-            else
-            {
-                animator.ResetTrigger("Attack");
-            }
+        }
+
+        if (animator != null && targetsDamaged == 0)
+        {
+            animator.ResetTrigger("Attack");
         }
     }
 }

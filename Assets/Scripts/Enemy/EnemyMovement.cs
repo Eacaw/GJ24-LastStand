@@ -7,7 +7,8 @@ public class EnemyMovement : MonoBehaviour
     public bool canStart = true;
     public int damage = 1;
     public int health = 10;
-    public float damageInterval = 1f; // Time interval between damage applications
+    public float damageInterval = 1f;  // Time interval between damage applications
+    public int value = 1;
 
     // Algorithm Vars
     private List<Vector3> path;
@@ -19,6 +20,7 @@ public class EnemyMovement : MonoBehaviour
     private float damageCooldown;
 
     private Animator animator;
+    private PlayerController playerController;
 
     void Start()
     {
@@ -28,6 +30,12 @@ public class EnemyMovement : MonoBehaviour
         grid = gridData.GetComponent<Grid>();
         damageCooldown = 0f;
         animator = GetComponent<Animator>();
+
+        GameObject player = GameObject.Find("PlayerController");
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+        }
     }
 
     void Update()
@@ -178,6 +186,10 @@ public class EnemyMovement : MonoBehaviour
         health -= damage;
         if (health <= 0)
         {
+            if (playerController != null)
+            {
+                playerController.AddCurrency(value);  // Add currency to player
+            }
             Destroy(gameObject);
         }
     }
