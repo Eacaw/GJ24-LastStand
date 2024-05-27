@@ -125,6 +125,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 75
   damage: 25
+  range: 2
+  damageInterval: 1
+  isObstacle: 0
+  cost: 10
+  maxTargets: 1
 --- !u!65 &1232771750246528760
 BoxCollider:
   m_ObjectHideFlags: 0
