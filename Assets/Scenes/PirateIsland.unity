@@ -2809,6 +2809,8 @@ MonoBehaviour:
   maxEnemies: 100
   enemiesSpawned: 0
   canStart: 0
+  currentWave: 0
+  UIDocument: {fileID: 813827899}
 --- !u!4 &1187763062
 Transform:
   m_ObjectHideFlags: 0
@@ -2836,6 +2838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c1b4ce999688c4090b0d4d7b0c726d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waveCount: 50
 --- !u!1001 &1189872175
 PrefabInstance:
   m_ObjectHideFlags: 0

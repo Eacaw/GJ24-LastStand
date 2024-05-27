@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Spawn : MonoBehaviour
 {
@@ -16,13 +17,19 @@ public class Spawn : MonoBehaviour
     private Vector3[] spawnPoints;
 
     private Waves waves;
-    private int currentWave = 0;
+    public int currentWave = 0;
     private bool isSpawning = false;
 
     private List<GameObject> activeEnemies = new List<GameObject>();
 
+    public UIDocument UIDocument;
+    private VisualElement root;
+    private Label waveCounter;
+
     void Start()
     {
+        root = UIDocument.rootVisualElement;
+        waveCounter = root.Q<Label>("WaveCount");
         spawnPoints = new Vector3[maxEnemies];
         spawnPoints[0] = new Vector3(-15, 0, 0);
         spawnPoints[1] = new Vector3(15, 0, 0);
@@ -56,6 +63,7 @@ public class Spawn : MonoBehaviour
             yield return new WaitUntil(() => activeEnemies.Count == 0);
             Debug.Log("Wave " + (currentWave) + " ended.");
             currentWave++;
+            waveCounter.text = currentWave.ToString();
             yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
         }
 
