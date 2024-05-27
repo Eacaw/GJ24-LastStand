@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public float speed = 5f;
-    public bool canStart = false;
+    public bool canStart = true;
 
     // Algorithm Vars
     private List<Vector3> path;
@@ -14,13 +14,15 @@ public class EnemyMovement : MonoBehaviour
     private Transform target;
     private Rigidbody rb;
 
+    private Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         target = FindNearestTarget();
         GameObject test = GameObject.Find("GridData");
+        animator = GetComponent<Animator>();
         grid = test.GetComponent<Grid>();
-
 
         this.speed = Random.Range(3f, 7f);
     }
@@ -33,18 +35,39 @@ public class EnemyMovement : MonoBehaviour
             target = FindNearestTarget();
         }
 
+        // Rotate towards target
+        if (target != null)
+        {
+            Vector3 targetDir = target.position - transform.position;
+            float step = speed * Time.deltaTime;
+            Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDir);
+        }
+
         // If there is no path yet and we can start, then determine path
         if (target != null && grid != null && canStart == true && path == null)
         {
             Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, this.grid);
-            Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(target.position, this.grid);
+            Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(
+                target.position,
+                this.grid
+            );
             List<Vector3Int> intPath = Pathfinding.Instance.FindPath(gridPos, targetGridPos);
             path = new List<Vector3>();
-            foreach (Vector3Int pos in intPath)
+            if (intPath != null)
             {
-                path.Add((Vector3)pos);
+                foreach (Vector3Int pos in intPath)
+                {
+                    path.Add((Vector3)pos);
+                }
+                targetIndex = 0;
             }
-            targetIndex = 0;
+            else
+            {
+                path = null;
+                target = FindNearestTarget();
+                MoveTowardsTarget(target.position);
+            }
         }
 
         // If there is a path and a target get moving
@@ -52,7 +75,6 @@ public class EnemyMovement : MonoBehaviour
         {
             MoveTowardsTarget();
         }
-
     }
 
     Transform FindNearestTarget()
@@ -81,6 +103,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (path != null && targetIndex < path.Count)
         {
+            animator.SetBool("isWalking", true);
             Vector3 targetPosition = path[targetIndex];
             Vector3 direction = (targetPosition - transform.position).normalized;
             transform.position += direction * speed * Time.deltaTime;
@@ -92,11 +115,24 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    void MoveTowardsTarget(Vector3 targetPosition)
+    {
+        animator.SetBool("isWalking", true);
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        transform.position += direction * speed * Time.deltaTime;
+
+        if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
+        {
+            targetIndex++;
+        }
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Target"))
         {
-            Destroy(gameObject);
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", true);
         }
     }
 }
