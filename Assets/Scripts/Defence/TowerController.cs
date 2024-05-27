@@ -8,10 +8,28 @@ public class TowerController : MonoBehaviour
     public float range = 2f;  // Range within which the tower deals damage to enemies
     public float damageInterval = 1f;  // Time interval between damage applications
     public bool isObstacle = false;
+    public int cost = 5; // Cost to place the tower
+
+    private float damageCooldown;
+    private PlayerController playerController;
 
     void Start()
     {
         damageCooldown = 0f;
+
+        GameObject player = GameObject.Find("PlayerController");
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+
+            // Subtract cost from player currency when tower is placed
+            if (playerController != null && !playerController.SubtractCurrency(cost))
+            {
+                // We can change how this works if we want, maybe highlight red too or something
+                Debug.Log("Not enough currency to place tower.");
+                gameObject.SetActive(false);  // Deactivate the tower if not enough currency
+            }
+        }
     }
 
     void Update()
@@ -58,8 +76,6 @@ public class TowerController : MonoBehaviour
 
         return nearestEnemy;
     }
-
-    private float damageCooldown;
 
     public void TakeDamage(int damage)
     {
