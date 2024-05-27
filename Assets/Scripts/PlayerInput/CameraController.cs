@@ -8,28 +8,28 @@ public class CameraController : MonoBehaviour
     private int rotation = 0;
 
     private Vector3 rot0Pos = new Vector3(0, 13.5f, -12);
-    private Vector3 rot0Rot = new Vector3(55, 0, 0);
+    private Vector3 rot0Rot = new Vector3(45, 0, 0);
 
     private Vector3 rot1Pos = new Vector3(-8.5f, 13.5f, -8.5f);
-    private Vector3 rot1Rot = new Vector3(55, 45, 0);
+    private Vector3 rot1Rot = new Vector3(45, 45, 0);
 
     private Vector3 rot2Pos = new Vector3(-12, 13.5f, 0);
-    private Vector3 rot2Rot = new Vector3(55, 90, 0);
+    private Vector3 rot2Rot = new Vector3(45, 90, 0);
 
     private Vector3 rot3Pos = new Vector3(-8.5f, 13.5f, 8.5f);
-    private Vector3 rot3Rot = new Vector3(55, 135, 0);
+    private Vector3 rot3Rot = new Vector3(45, 135, 0);
 
     private Vector3 rot4Pos = new Vector3(0, 13.5f, 12);
-    private Vector3 rot4Rot = new Vector3(55, 180, 0);
+    private Vector3 rot4Rot = new Vector3(45, 180, 0);
 
     private Vector3 rot5Pos = new Vector3(8.5f, 13.5f, 8.5f);
-    private Vector3 rot5Rot = new Vector3(55, 225, 0);
+    private Vector3 rot5Rot = new Vector3(45, 225, 0);
 
     private Vector3 rot6Pos = new Vector3(12, 13.5f, 0);
-    private Vector3 rot6Rot = new Vector3(55, 270, 0);
+    private Vector3 rot6Rot = new Vector3(45, 270, 0);
 
     private Vector3 rot7Pos = new Vector3(8.5f, 13.5f, -8.5f);
-    private Vector3 rot7Rot = new Vector3(55, 315, 0);
+    private Vector3 rot7Rot = new Vector3(45, 315, 0);
 
     private void Start() { }
 
