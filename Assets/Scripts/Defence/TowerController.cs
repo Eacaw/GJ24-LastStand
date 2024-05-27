@@ -83,7 +83,7 @@ public class TowerController : MonoBehaviour
 
         if (health <= 0)
         {
-            gameObject.SetActive(false); // Deactivate the tower instead of destroying it
+            Destroy(gameObject);
         }
     }
 
