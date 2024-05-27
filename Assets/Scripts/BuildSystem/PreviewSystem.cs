@@ -30,6 +30,8 @@ public class PreviewSystem : MonoBehaviour
         stopPreview();
         this.objectData = objectData;
         this.previewInstance = objectData.getGameObject(new Vector3(0, 0, 0));
+        TowerController tc = this.previewInstance.GetComponent<TowerController>();
+        tc.setIsPreview();
 
         prepareCellIndicator();
     }
