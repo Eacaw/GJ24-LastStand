@@ -10,6 +10,8 @@ public class TowerController : MonoBehaviour
     public bool isObstacle = false;
     public int cost = 5; // Cost to place the tower
     public int maxTargets = 1; // Maximum number of enemies the tower can damage at once
+    public bool isPreview = false;
+    public GameObject rangeIndicator;
 
     private float damageCooldown;
     private PlayerController playerController;
@@ -17,6 +19,7 @@ public class TowerController : MonoBehaviour
     void Start()
     {
         damageCooldown = 0f;
+        UpdateRangeIndicator();
     }
 
     void Update()
@@ -61,6 +64,12 @@ public class TowerController : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void setIsPreview()
+    {
+        this.isPreview = true;
+        ShowRangeIndicator();
     }
 
     GameObject FindNearestEnemy()
@@ -119,6 +128,23 @@ public class TowerController : MonoBehaviour
         if (animator != null && targetsDamaged == 0)
         {
             animator.ResetTrigger("Attack");
+        }
+    }
+
+    void ShowRangeIndicator()
+    {
+        if (rangeIndicator != null)
+        {
+            Debug.Log("Showing Range Indicator");
+            rangeIndicator.SetActive(true);
+        }
+    }
+
+    void UpdateRangeIndicator()
+    {
+        if (rangeIndicator != null)
+        {
+            rangeIndicator.transform.localScale = new Vector3(range * 2, 0, range * 2);  // Adjust scale based on range
         }
     }
 }
