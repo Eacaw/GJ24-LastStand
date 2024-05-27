@@ -16,20 +16,6 @@ public class TowerController : MonoBehaviour
     void Start()
     {
         damageCooldown = 0f;
-
-        GameObject player = GameObject.Find("PlayerController");
-        if (player != null)
-        {
-            playerController = player.GetComponent<PlayerController>();
-
-            // Subtract cost from player currency when tower is placed
-            if (playerController != null && !playerController.SubtractCurrency(cost))
-            {
-                // We can change how this works if we want, maybe highlight red too or something
-                Debug.Log("Not enough currency to place tower.");
-                gameObject.SetActive(false);  // Deactivate the tower if not enough currency
-            }
-        }
     }
 
     void Update()
@@ -54,6 +40,24 @@ public class TowerController : MonoBehaviour
             {
                 DealDamageToEnemiesInRange();
                 damageCooldown = damageInterval;
+            }
+        }
+    }
+
+    public void TowerPlaced()
+    {
+        GameObject player = GameObject.Find("PlayerController");
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+
+            // Subtract cost from player currency when tower is placed
+            if (playerController != null && !playerController.SubtractCurrency(cost))
+            {
+                // We can change how this works if we want, maybe highlight red too or something
+                Debug.Log("Not enough currency to place tower.");
+                // gameObject.SetActive(false);  // Deactivate the tower if not enough currency
+                Destroy(gameObject);
             }
         }
     }
