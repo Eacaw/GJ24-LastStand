@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 20dee59ddbaa0fe498b1ffa760aea796
+guid: 96e073554a0ca884cad42e9d4594ff4e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -212,35 +212,6 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: CharacterArmature|Jump_Idlea
-      takeName: CharacterArmature|Jump_Idlea
-      internalID: 2520109199756008828
-      firstFrame: 0
-      lastFrame: 15
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
       name: CharacterArmature|Jump_Land
       takeName: CharacterArmature|Jump_Land
       internalID: -7326212992105015716
@@ -368,8 +339,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -397,8 +368,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -419,7 +390,7 @@ ModelImporter:
       takeName: CharacterArmature|Wave
       internalID: -9021793991225143758
       firstFrame: 0
-      lastFrame: 50
+      lastFrame: 46
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

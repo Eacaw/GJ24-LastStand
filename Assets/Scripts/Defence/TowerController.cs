@@ -4,9 +4,47 @@ using UnityEngine;
 public class TowerController : MonoBehaviour
 {
     public int health = 2;  // Initial health of the tower
-    public int damage = 2;  // Damage amount to be dealt to the enemy
+    public int damage = 1;  // Damage amount to be dealt to the enemy
     public float range = 2f;  // Range within which the tower deals damage to enemies
     public float damageInterval = 1f;  // Time interval between damage applications
+    public bool isObstacle = false;
+
+    void Update()
+    {
+        if (!isObstacle)
+        {
+            GameObject nearestEnemy = FindNearestEnemy();
+            if (nearestEnemy != null)
+            {
+                Vector3 direction = nearestEnemy.transform.position - transform.position;
+                Quaternion rotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Lerp(
+                    transform.rotation,
+                    rotation,
+                    Time.deltaTime * 2
+                );
+            }
+        }
+    }
+
+    GameObject FindNearestEnemy()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject nearestEnemy = null;
+        float shortestDistance = Mathf.Infinity;
+
+        foreach (GameObject enemy in enemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+
+        return nearestEnemy;
+    }
 
     private float damageCooldown;
 
@@ -23,6 +61,12 @@ public class TowerController : MonoBehaviour
         {
             DealDamageToEnemiesInRange();
             damageCooldown = damageInterval;
+
+            Animator animator = collision.gameObject.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.SetTrigger("Attack");
+            }
         }
     }
 

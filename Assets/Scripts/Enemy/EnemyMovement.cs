@@ -4,10 +4,11 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     public float speed = 5f;
-    public bool canStart = false;
+    public bool canStart = true;
     public int damage = 1;
     public int health = 10;
     public float damageInterval = 1f;  // Time interval between damage applications
+
 
     // Algorithm Vars
     private List<Vector3> path;
@@ -18,15 +19,17 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody rb;
     private float damageCooldown;
 
+    private Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         target = FindNearestTarget();
         GameObject gridData = GameObject.Find("GridData");
         grid = gridData.GetComponent<Grid>();
-
-        speed = Random.Range(3f, 7f);
+        this.speed = Random.Range(3f, 7f);
         damageCooldown = 0f;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -44,6 +47,15 @@ public class EnemyMovement : MonoBehaviour
         }
 
         damageCooldown -= Time.deltaTime;
+
+        // Rotate towards target
+        if (target != null)
+        {
+            Vector3 targetDir = target.position - transform.position;
+            float step = speed * Time.deltaTime;
+            Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDir);
+        }
     }
 
     void FixedUpdate()
@@ -100,6 +112,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (path != null && targetIndex < path.Count)
         {
+            animator.SetBool("isWalking", true);
             Vector3 targetPosition = path[targetIndex];
             Vector3 direction = (targetPosition - transform.position).normalized;
             rb.MovePosition(transform.position + direction * speed * Time.fixedDeltaTime);
@@ -127,6 +140,8 @@ public class EnemyMovement : MonoBehaviour
         if (tc != null)
         {
             tc.TakeDamage(damage);
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", true);
         }
     }
 

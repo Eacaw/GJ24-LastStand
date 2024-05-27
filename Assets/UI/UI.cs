@@ -9,26 +9,27 @@ public class UI : MonoBehaviour
     public GridData gridData;
     public ObjectDatabaseController objectDatabaseController;
     public CameraController cameraController;
+    public Spawn spawncontroller;
 
     private void OnEnable()
     {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
 
-        Button standButton = root.Q<Button>("standButton");
-        string standId = objectDatabaseController.GetObjectDataByName("Stand").Id;
-        standButton.clicked += () => gridData.startBuildMode(standId);
+        Button RedbeardButton = root.Q<Button>("Redbeard");
+        string redbeardId = objectDatabaseController.GetObjectDataByName("Redbeard").Id;
+        RedbeardButton.clicked += () => gridData.startBuildMode(redbeardId);
 
-        Button chairButton = root.Q<Button>("chairButton");
-        string chairId = objectDatabaseController.GetObjectDataByName("Chair").Id;
-        chairButton.clicked += () => gridData.startBuildMode(chairId);
+        Button LongJohnButton = root.Q<Button>("LongJohn");
+        string longJohnId = objectDatabaseController.GetObjectDataByName("LongJohn").Id;
+        LongJohnButton.clicked += () => gridData.startBuildMode(longJohnId);
 
-        Button tableButton = root.Q<Button>("tableButton");
-        string tableId = objectDatabaseController.GetObjectDataByName("Table").Id;
-        tableButton.clicked += () => gridData.startBuildMode(tableId);
+        Button IronMaryButton = root.Q<Button>("IronMary");
+        string ironMaryId = objectDatabaseController.GetObjectDataByName("IronMary").Id;
+        IronMaryButton.clicked += () => gridData.startBuildMode(ironMaryId);
 
-        Button beltButton = root.Q<Button>("beltButton");
-        string beltId = objectDatabaseController.GetObjectDataByName("Conveyor").Id;
-        beltButton.clicked += () => gridData.startBuildMode(beltId);
+        Button BarricadeButton = root.Q<Button>("Barricade");
+        string barricadeId = objectDatabaseController.GetObjectDataByName("Barricade").Id;
+        BarricadeButton.clicked += () => gridData.startBuildMode(barricadeId);
 
         Button deleteButton = root.Q<Button>("deleteButton");
         deleteButton.clicked += () => gridData.startDeleteMode();
@@ -42,8 +43,8 @@ public class UI : MonoBehaviour
         Button startButton = root.Q<Button>("startButton");
         startButton.clicked += () =>
         {
+            spawncontroller.canStart = true;
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
             foreach (GameObject enemy in enemies)
             {
                 enemy.GetComponent<EnemyMovement>().canStart = true;
