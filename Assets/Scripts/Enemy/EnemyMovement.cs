@@ -51,7 +51,7 @@ public class EnemyMovement : MonoBehaviour
         // Rotate towards target
         if (target != null)
         {
-            Vector3 targetDir = target.position - transform.position;
+            Vector3 targetDir = target.transform.position - transform.position;
             float step = speed * Time.deltaTime;
             Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
             transform.rotation = Quaternion.LookRotation(newDir);
