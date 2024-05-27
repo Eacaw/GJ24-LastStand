@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/objectButton.uss?fileID=7433441132597879392&amp;guid=f040edf095c138342859a70923aa7d79&amp;type=3#objectButton" />
     <ui:VisualElement name="MenuBar" style="flex-grow: initial; flex-direction: row; align-items: auto; justify-content: center; align-self: center; width: 421px; max-width: 500px; height: 90px; background-color: rgba(61, 46, 70, 0.69); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; transform-origin: bottom; max-height: 90px; position: relative; padding-bottom: 0; margin-bottom: 1px; top: 83%; bottom: auto; flex-shrink: initial; flex-basis: auto;">
-        <ui:Button text="Stand" parse-escape-sequences="true" display-tooltip-when-elided="true" name="standButton" class="objectButton" />
-        <ui:Button text="Chair" parse-escape-sequences="true" display-tooltip-when-elided="true" name="chairButton" class="objectButton" />
-        <ui:Button text="Table" parse-escape-sequences="true" display-tooltip-when-elided="true" name="tableButton" class="objectButton" />
+        <ui:Button text="Red beard" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Redbeard" class="objectButton" style="white-space: normal; -unity-text-align: middle-center;" />
+        <ui:Button text="Long John" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LongJohn" class="objectButton" style="white-space: normal;" />
+        <ui:Button text="Iron Mary" parse-escape-sequences="true" display-tooltip-when-elided="true" name="IronMary" class="objectButton" style="white-space: normal;" />
         <ui:Button text="Delete" parse-escape-sequences="false" display-tooltip-when-elided="true" name="deleteButton" class="objectButton" style="background-color: rgb(149, 96, 111);" />
         <ui:Button text="Start" parse-escape-sequences="false" display-tooltip-when-elided="true" name="startButton" class="objectButton" />
     </ui:VisualElement>
