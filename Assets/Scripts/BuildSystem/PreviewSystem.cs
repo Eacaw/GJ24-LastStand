@@ -11,6 +11,7 @@ public class PreviewSystem : MonoBehaviour
     [SerializeField]
     private GameObject cellIndicatorPrefab;
     private List<GameObject> cellIndicators;
+    public PlayerController playerController;
 
     private GameObject previewInstance;
 
@@ -106,7 +107,12 @@ public class PreviewSystem : MonoBehaviour
         {
             foreach (Material material in renderer.materials)
             {
-                material.color = canBePlaced ? happyColor : sadColor;
+                material.color =
+                    canBePlaced
+                    && this.playerController.currency
+                        >= this.previewInstance.GetComponent<TowerController>().cost
+                        ? happyColor
+                        : sadColor;
             }
         }
     }
