@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TowerController : MonoBehaviour
 {
     public int health = 2; // Initial health of the tower
+    int currentHealth;
     public int damage = 1; // Damage amount to be dealt to the enemy
     public float range = 2f; // Range within which the tower deals damage to enemies
     public float damageInterval = 1f; // Time interval between damage applications
@@ -19,6 +21,7 @@ public class TowerController : MonoBehaviour
     void Start()
     {
         damageCooldown = 0f;
+        currentHealth = health;
         UpdateRangeIndicator();
     }
 
@@ -72,6 +75,13 @@ public class TowerController : MonoBehaviour
         ShowRangeIndicator();
     }
 
+    public void isSelected(VisualElement upgradeTab)
+    {
+        upgradeTab.style.display = DisplayStyle.Flex;
+        Label healthValue = upgradeTab.Q<Label>("HealthValue");
+        healthValue.text = currentHealth.ToString() + " / " + health.ToString();
+    }
+
     GameObject FindNearestEnemy()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -93,9 +103,9 @@ public class TowerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
+        currentHealth -= damage;
 
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             Destroy(gameObject);
         }
