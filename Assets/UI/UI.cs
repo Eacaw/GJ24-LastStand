@@ -48,5 +48,10 @@ public class UI : MonoBehaviour
             }
             gridData.endBuildMode();
         };
+
+        VisualElement upgradeTab = root.Q<VisualElement>("UpgradeTab");
+        Button closeButton = upgradeTab.Q<Button>("CloseButton");
+        closeButton.clicked += () => upgradeTab.style.display = DisplayStyle.None;
+        upgradeTab.style.display = DisplayStyle.None;
     }
 }
