@@ -31,9 +31,6 @@ public class UI : MonoBehaviour
         string barricadeId = objectDatabaseController.GetObjectDataByName("Barricade").Id;
         BarricadeButton.clicked += () => gridData.startBuildMode(barricadeId);
 
-        Button deleteButton = root.Q<Button>("deleteButton");
-        deleteButton.clicked += () => gridData.startDeleteMode();
-
         Button RotateLeft = root.Q<Button>("RotateLeft");
         RotateLeft.clicked += () => cameraController.RotateCameraLeft();
 

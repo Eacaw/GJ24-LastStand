@@ -69,6 +69,7 @@ public class TowerController : MonoBehaviour
     public void setIsPreview()
     {
         this.isPreview = true;
+        this.gameObject.tag = "Preview";
         ShowRangeIndicator();
     }
 
@@ -144,7 +145,7 @@ public class TowerController : MonoBehaviour
     {
         if (rangeIndicator != null)
         {
-            rangeIndicator.transform.localScale = new Vector3(range * 2, 0, range * 2);  // Adjust scale based on range
+            rangeIndicator.transform.localScale = new Vector3(range * 2, 0, range * 2); // Adjust scale based on range
         }
     }
 }
