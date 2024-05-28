@@ -2661,7 +2661,7 @@ MonoBehaviour:
   previewSystem: {fileID: 1705885244}
   inputManager: {fileID: 1908167242}
   inBuildMode: 0
-  inDeleteMode: 0
+  UIDocument: {fileID: 813827899}
 --- !u!156049354 &1140685420
 Grid:
   m_ObjectHideFlags: 0
@@ -4582,6 +4582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellIndicatorPrefab: {fileID: 4625749672066797125, guid: 126996ecc1d355e4da7d5b1b12067396,
     type: 3}
+  playerController: {fileID: 196033963}
 --- !u!4 &1705885245
 Transform:
   m_ObjectHideFlags: 0
