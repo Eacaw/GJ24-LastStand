@@ -58,7 +58,6 @@ public class TowerController : MonoBehaviour
             // Subtract cost from player currency when tower is placed
             if (playerController != null && !playerController.SubtractCurrency(cost))
             {
-                Debug.Log("Not enough currency to place tower.");
                 Destroy(gameObject);
                 return false;
             }
@@ -136,7 +135,6 @@ public class TowerController : MonoBehaviour
     {
         if (rangeIndicator != null)
         {
-            Debug.Log("Showing Range Indicator");
             rangeIndicator.SetActive(true);
         }
     }

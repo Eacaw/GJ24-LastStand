@@ -12,7 +12,6 @@ public class Spawn : MonoBehaviour
 
     public bool canStart = false;
 
-
     private Vector3[] spawnPoints;
 
     private Waves waves;
@@ -60,14 +59,12 @@ public class Spawn : MonoBehaviour
         {
             yield return StartCoroutine(SpawnWave());
             yield return new WaitUntil(() => activeEnemies.Count == 0);
-            Debug.Log("Wave " + (currentWave) + " ended.");
             currentWave++;
             waveCounter.text = currentWave.ToString();
             yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
         }
 
         isSpawning = false;
-        Debug.Log("Game over you win!");
     }
 
     IEnumerator SpawnWave()
