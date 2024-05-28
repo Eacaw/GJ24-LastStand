@@ -58,7 +58,6 @@ public class TowerController : MonoBehaviour
             // Subtract cost from player currency when tower is placed
             if (playerController != null && !playerController.SubtractCurrency(cost))
             {
-                Debug.Log("Not enough currency to place tower.");
                 Destroy(gameObject);
                 return false;
             }
@@ -69,6 +68,7 @@ public class TowerController : MonoBehaviour
     public void setIsPreview()
     {
         this.isPreview = true;
+        this.gameObject.tag = "Preview";
         ShowRangeIndicator();
     }
 
@@ -135,7 +135,6 @@ public class TowerController : MonoBehaviour
     {
         if (rangeIndicator != null)
         {
-            Debug.Log("Showing Range Indicator");
             rangeIndicator.SetActive(true);
         }
     }
@@ -144,7 +143,7 @@ public class TowerController : MonoBehaviour
     {
         if (rangeIndicator != null)
         {
-            rangeIndicator.transform.localScale = new Vector3(range * 2, 0, range * 2);  // Adjust scale based on range
+            rangeIndicator.transform.localScale = new Vector3(range * 2, 0, range * 2); // Adjust scale based on range
         }
     }
 }

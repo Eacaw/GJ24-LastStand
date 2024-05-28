@@ -3,9 +3,8 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-    public int currency = 20;  // Initial currency balance
+    public int currency = 20; // Initial currency balance
     public UIDocument UIDocument;
-
 
     private VisualElement root;
     private Label currencyCounter;
@@ -20,7 +19,6 @@ public class PlayerController : MonoBehaviour
     public void AddCurrency(int amount)
     {
         currency += amount;
-        Debug.Log("Currency added: " + amount + ". New balance: " + currency);
         currencyCounter.text = currency.ToString();
     }
 
@@ -29,13 +27,11 @@ public class PlayerController : MonoBehaviour
         if (currency >= amount)
         {
             currency -= amount;
-            Debug.Log("Currency subtracted: " + amount + ". New balance: " + currency);
             currencyCounter.text = currency.ToString();
             return true;
         }
         else
         {
-            Debug.Log("Not enough currency. Current balance: " + currency);
             return false;
         }
     }

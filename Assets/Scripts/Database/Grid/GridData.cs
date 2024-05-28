@@ -34,7 +34,6 @@ public class GridData : MonoBehaviour
 
     [SerializeField]
     public bool inBuildMode = false;
-    public bool inDeleteMode = false;
     private String currentObjectId;
 
     private void Start()
@@ -48,7 +47,6 @@ public class GridData : MonoBehaviour
         );
         this.gridPreview.GetComponent<GridPreview>().setGridSize(this.gridSize);
         this.inBuildMode = false;
-        this.inDeleteMode = false;
 
         // Setup the input manager event actions
         inputManager.OnLmb += AddObject;
@@ -74,26 +72,6 @@ public class GridData : MonoBehaviour
                     this.previewSystem.getOccupiedCells(gridPos)
                 )
             );
-        }
-        else if (inDeleteMode)
-        {
-            Vector3 worldPos = inputManager.getMouseWorldPosition();
-            Vector3Int gridPos = GridPositionUtil.getGridFromWorld(worldPos, this.grid);
-            Vector2Int gridPos2D = GridPositionUtil.get2DGridFromWorld(worldPos, this.grid);
-
-            if (this.objectIdMap.ContainsKey(gridPos2D))
-            {
-                String objectId = this.objectIdMap[gridPos2D];
-                ObjectData objectData = objectDatabaseController.GetObjectData(objectId);
-                List<Vector2Int> occupiedCells = objectData.getOccupiedCells(
-                    GridPositionUtil.getGridFrom2DGrid(gridPos2D)
-                );
-                this.grid3DObjects.setHighlightedCells(occupiedCells);
-            }
-            else
-            {
-                this.grid3DObjects.clearHighlightedCells();
-            }
         }
     }
 
@@ -158,12 +136,10 @@ public class GridData : MonoBehaviour
 
     public void startBuildMode(String objectId)
     {
-        endDeleteMode();
         gridPreview.SetActive(true);
         this.previewSystem.startPreview(objectDatabaseController.GetObjectData(objectId));
         this.currentObjectId = objectId;
         this.inBuildMode = true;
-        this.inDeleteMode = false;
     }
 
     public void endBuildMode()
@@ -171,25 +147,6 @@ public class GridData : MonoBehaviour
         this.inBuildMode = false;
         this.previewSystem.stopPreview();
         this.currentObjectId = null;
-        gridPreview.SetActive(false);
-    }
-
-    public void startDeleteMode()
-    {
-        endBuildMode();
-        gridPreview.SetActive(true);
-        this.inDeleteMode = true;
-        this.inBuildMode = false;
-        inputManager.OnLmb -= AddObject;
-        inputManager.OnLmb += removeObject;
-    }
-
-    public void endDeleteMode()
-    {
-        this.inDeleteMode = false;
-        inputManager.OnLmb -= removeObject;
-        inputManager.OnLmb += AddObject;
-        this.grid3DObjects.clearHighlightedCells();
         gridPreview.SetActive(false);
     }
 
@@ -229,6 +186,7 @@ public class GridData : MonoBehaviour
                 return false;
             }
         }
+
         return true;
     }
 
