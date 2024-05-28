@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GridData : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class GridData : MonoBehaviour
     [SerializeField]
     public bool inBuildMode = false;
     private String currentObjectId;
+
+    public UIDocument UIDocument;
 
     private void Start()
     {
@@ -122,6 +125,22 @@ public class GridData : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            Vector3 worldPos = inputManager.getMouseWorldPosition();
+            Vector2Int gridPos = GridPositionUtil.get2DGridFromWorld(worldPos, this.grid);
+            if (this.objectIdMap.ContainsKey(gridPos))
+            {
+                String objectId = this.objectIdMap[gridPos];
+                ObjectData objectData = objectDatabaseController.GetObjectData(objectId);
+                TowerController tc = objectData.Prefab.GetComponent<TowerController>();
+
+                VisualElement root = UIDocument.rootVisualElement;
+                VisualElement upgradeTab = root.Q<VisualElement>("UpgradeTab");
+                tc.isSelected(upgradeTab);
+
+            }
+        }
     }
 
     private void OnRotate()
@@ -147,7 +166,8 @@ public class GridData : MonoBehaviour
         this.inBuildMode = false;
         this.previewSystem.stopPreview();
         this.currentObjectId = null;
-        gridPreview.SetActive(false);
+        // This is set to false so that we can get clicks mid game
+        // gridPreview.SetActive(false);
     }
 
     private void removeObject()
