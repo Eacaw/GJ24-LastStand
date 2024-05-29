@@ -31,6 +31,13 @@ public class Grid3DObjects
         return true;
     }
 
+    public GameObject getObjectFromPosition(Vector2Int gridPos)
+    {
+        GameObject value;
+        this.visibleObjects.TryGetValue(gridPos, out value);
+        return value;
+    }
+
     public List<GameObject> removeObject(List<Vector2Int> occupiedCells)
     {
         List<GameObject> removedObjects = new List<GameObject>();
