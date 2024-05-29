@@ -20,6 +20,7 @@ public class TowerController : MonoBehaviour
     private int healCost = 1;
     public bool isPreview = false;
     public GameObject rangeIndicator;
+    public string nameString;
 
     // Upgrade tab variables
     private Label towerName;
@@ -155,7 +156,9 @@ public class TowerController : MonoBehaviour
 
     private void handleHeal()
     {
-        if (playerController != null && !playerController.SubtractCurrency(healCost))
+        int costBasedOnMissingHealth = (int)((this.health - this.currentHealth) / 10 * this.healCost);
+
+        if (playerController != null && !playerController.SubtractCurrency(costBasedOnMissingHealth))
         {
             Debug.Log("Not Enough");
             return;
@@ -192,20 +195,30 @@ public class TowerController : MonoBehaviour
         }
     }
 
+    private void setHealCostLabel()
+    {
+        if (this.healCostLabel != null)
+        {
+            int costBasedOnMissingHealth = (int)((this.health - this.currentHealth) / 10 * this.healCost);
+            healCostLabel.text = "Cost: " + costBasedOnMissingHealth.ToString();
+        }
+    }
+
     private void refreshUpgradeTabValues()
     {
-        towerName.text = "BOBOBO"; // TODO: Implement real tower names
+        towerName.text = nameString;
         levelLabel.text = "Level " + (this.currentLevel + 1).ToString();
         setHealthValue();
         damageValue.text = "Damage: " + this.damage.ToString();
         upgradeCostLabel.text = "Cost: " + this.upgradeCost.ToString();
-        healCostLabel.text = "Cost: " + this.healCost.ToString();
+        setHealCostLabel();
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         this.setHealthValue();
+        this.setHealCostLabel();
 
         if (currentHealth <= 0)
         {
