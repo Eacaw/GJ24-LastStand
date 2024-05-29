@@ -4,16 +4,21 @@ using UnityEngine.UIElements;
 
 public class TowerController : MonoBehaviour
 {
+    // Stat variables
     public int health = 2; // Initial health of the tower
-    int currentHealth;
+    private int currentHealth;
     public int damage = 1; // Damage amount to be dealt to the enemy
     public float range = 2f; // Range within which the tower deals damage to enemies
     public float damageInterval = 1f; // Time interval between damage applications
+    public int maxTargets = 1; // Maximum number of enemies the tower can damage at once
+    private int currentLevel = 1;
+
+    // Reference variables
     public bool isObstacle = false;
     public int cost = 5; // Cost to place the tower
-    public int maxTargets = 1; // Maximum number of enemies the tower can damage at once
     public bool isPreview = false;
     public GameObject rangeIndicator;
+    private Label healthValue;
 
     private float damageCooldown;
     private PlayerController playerController;
@@ -78,8 +83,8 @@ public class TowerController : MonoBehaviour
     public void isSelected(VisualElement upgradeTab)
     {
         upgradeTab.style.display = DisplayStyle.Flex;
-        Label healthValue = upgradeTab.Q<Label>("HealthValue");
-        healthValue.text = currentHealth.ToString() + " / " + health.ToString();
+        healthValue = upgradeTab.Q<Label>("HealthValue");
+        setHealthValue();
     }
 
     GameObject FindNearestEnemy()
@@ -101,9 +106,18 @@ public class TowerController : MonoBehaviour
         return nearestEnemy;
     }
 
+    private void setHealthValue()
+    {
+        if (healthValue != null)
+        {
+            healthValue.text = currentHealth.ToString() + " / " + health.ToString();
+        }
+    }
+
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        this.setHealthValue();
 
         if (currentHealth <= 0)
         {
