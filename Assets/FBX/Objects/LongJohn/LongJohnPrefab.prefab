@@ -238,11 +238,13 @@ MonoBehaviour:
   damage: 25
   range: 2
   damageInterval: 1
+  maxTargets: 1
   isObstacle: 0
   cost: 10
-  maxTargets: 1
+  upgradeCost: 5
   isPreview: 0
   rangeIndicator: {fileID: 3370591519689704402}
+  nameString: Long John
 --- !u!65 &1232771750246528760
 BoxCollider:
   m_ObjectHideFlags: 0

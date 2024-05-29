@@ -239,11 +239,13 @@ MonoBehaviour:
   damage: 30
   range: 2
   damageInterval: 1
+  maxTargets: 1
   isObstacle: 0
   cost: 5
-  maxTargets: 1
+  upgradeCost: 5
   isPreview: 0
   rangeIndicator: {fileID: 4414146273898575904}
+  nameString: Redbeard
 --- !u!54 &3864213400523037649
 Rigidbody:
   m_ObjectHideFlags: 0
