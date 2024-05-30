@@ -239,6 +239,7 @@ MonoBehaviour:
   isPreview: 0
   rangeIndicator: {fileID: 4694795379762826408}
   nameString: Iron Mary
+  damageSoundClip: {fileID: 8300000, guid: e8d18621988ca174c8afb743c12443f7, type: 3}
 --- !u!54 &8219256240081407816
 Rigidbody:
   m_ObjectHideFlags: 0

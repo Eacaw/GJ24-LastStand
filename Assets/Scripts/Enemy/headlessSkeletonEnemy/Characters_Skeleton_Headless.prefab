@@ -129,6 +129,8 @@ MonoBehaviour:
   damage: 10
   health: 40
   damageInterval: 1
+  value: 1
+  damageSoundClip: {fileID: 8300000, guid: e8d18621988ca174c8afb743c12443f7, type: 3}
 --- !u!54 &4986711787558236131
 Rigidbody:
   m_ObjectHideFlags: 0
