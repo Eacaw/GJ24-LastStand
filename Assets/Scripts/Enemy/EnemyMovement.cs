@@ -20,6 +20,7 @@ public class EnemyMovement : MonoBehaviour
     private float damageCooldown;
 
     private Animator animator;
+    public AudioClip damageSoundClip;
     private PlayerController playerController;
 
     void Start()
@@ -178,7 +179,13 @@ public class EnemyMovement : MonoBehaviour
             tc.TakeDamage(damage);
             animator.SetBool("isWalking", false);
             animator.SetBool("isAttacking", true);
+
+            if (damageSoundClip != null)
+            {
+                AudioPoolManager.Instance.PlaySound(damageSoundClip, transform.position);
+            }
         }
+
     }
 
     public void TakeDamage(int damage)

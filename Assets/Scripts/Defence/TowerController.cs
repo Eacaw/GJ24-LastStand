@@ -21,6 +21,7 @@ public class TowerController : MonoBehaviour
     public bool isPreview = false;
     public GameObject rangeIndicator;
     public string nameString;
+    public AudioClip damageSoundClip;
 
     // Upgrade tab variables
     private Label towerName;
@@ -240,6 +241,10 @@ public class TowerController : MonoBehaviour
                 if (animator != null)
                 {
                     animator.SetTrigger("Attack");
+                }
+                if (damageSoundClip != null)
+                {
+                    AudioPoolManager.Instance.PlaySound(damageSoundClip, transform.position);
                 }
                 EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
                 if (enemyMovement != null)
