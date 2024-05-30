@@ -232,11 +232,13 @@ MonoBehaviour:
   damage: 35
   range: 10
   damageInterval: 1
+  maxTargets: 1
   isObstacle: 0
   cost: 20
-  maxTargets: 1
+  upgradeCost: 5
   isPreview: 0
   rangeIndicator: {fileID: 4694795379762826408}
+  nameString: Iron Mary
 --- !u!54 &8219256240081407816
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -133,7 +133,8 @@ public class GridData : MonoBehaviour
             {
                 String objectId = this.objectIdMap[gridPos];
                 ObjectData objectData = objectDatabaseController.GetObjectData(objectId);
-                TowerController tc = objectData.Prefab.GetComponent<TowerController>();
+                GameObject gameObject = this.grid3DObjects.getObjectFromPosition(gridPos);
+                TowerController tc = gameObject.GetComponent<TowerController>();
 
                 VisualElement root = UIDocument.rootVisualElement;
                 VisualElement upgradeTab = root.Q<VisualElement>("UpgradeTab");

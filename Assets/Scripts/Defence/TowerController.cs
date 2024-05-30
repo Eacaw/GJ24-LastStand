@@ -4,16 +4,32 @@ using UnityEngine.UIElements;
 
 public class TowerController : MonoBehaviour
 {
+    // Stat variables
     public int health = 2; // Initial health of the tower
-    int currentHealth;
+    private int currentHealth;
     public int damage = 1; // Damage amount to be dealt to the enemy
     public float range = 2f; // Range within which the tower deals damage to enemies
     public float damageInterval = 1f; // Time interval between damage applications
+    public int maxTargets = 1; // Maximum number of enemies the tower can damage at once
+    private int currentLevel = 0;
+
+    // Reference variables
     public bool isObstacle = false;
     public int cost = 5; // Cost to place the tower
-    public int maxTargets = 1; // Maximum number of enemies the tower can damage at once
+    public int upgradeCost = 5; // Cost to upgrade the tower
+    private int healCost = 1;
     public bool isPreview = false;
     public GameObject rangeIndicator;
+    public string nameString;
+
+    // Upgrade tab variables
+    private Label towerName;
+    private Label levelLabel;
+    private Label healthValue;
+    private Label damageValue;
+    private Label upgradeCostLabel;
+    private Label healCostLabel;
+
 
     private float damageCooldown;
     private PlayerController playerController;
@@ -77,9 +93,79 @@ public class TowerController : MonoBehaviour
 
     public void isSelected(VisualElement upgradeTab)
     {
+        // Display tab
         upgradeTab.style.display = DisplayStyle.Flex;
-        Label healthValue = upgradeTab.Q<Label>("HealthValue");
-        healthValue.text = currentHealth.ToString() + " / " + health.ToString();
+
+        towerName = upgradeTab.Q<Label>("TowerName");
+        levelLabel = upgradeTab.Q<Label>("LevelLabel");
+        healthValue = upgradeTab.Q<Label>("HealthValue");
+        damageValue = upgradeTab.Q<Label>("DamageValue");
+        upgradeCostLabel = upgradeTab.Q<Label>("UpgradeCost");
+        healCostLabel = upgradeTab.Q<Label>("HealCost");
+
+        Button upgradeButton = upgradeTab.Q<Button>("UpgradeButton");
+        upgradeButton.clicked += handleUpgrade;
+
+        Button healButton = upgradeTab.Q<Button>("HealButton");
+        healButton.clicked += handleHeal;
+
+        refreshUpgradeTabValues();
+    }
+
+    private void handleUpgrade()
+    {
+        // Max level is 10 
+        if (this.currentLevel == 9)
+        {
+            return;
+        }
+
+        if (playerController != null && !playerController.SubtractCurrency(upgradeCost))
+        {
+            Debug.Log("Not Enough");
+            return;
+        }
+
+        ++this.currentLevel;
+
+        // Increase health
+        this.health = (int)(this.currentLevel * 15) + this.health;
+        this.currentHealth = this.health;
+        setHealthValue();
+
+        // Increase damage
+        this.damage = (int)(this.currentLevel * 10) + this.damage;
+
+        // If level 5 increase max targets
+        if (this.currentLevel == 4)
+        {
+            this.maxTargets = this.maxTargets * 2;
+        }
+
+        // If level 10 increase range
+        if (this.currentLevel == 9)
+        {
+            this.range = this.range * 1.5f;
+        }
+
+        // Increase upgrade cost for next upgrade
+        this.upgradeCost = 5 + (5 * this.currentLevel);
+
+        refreshUpgradeTabValues();
+    }
+
+    private void handleHeal()
+    {
+        int costBasedOnMissingHealth = (int)((this.health - this.currentHealth) / 10 * this.healCost);
+
+        if (playerController != null && !playerController.SubtractCurrency(costBasedOnMissingHealth))
+        {
+            Debug.Log("Not Enough");
+            return;
+        }
+
+        this.currentHealth = this.health;
+        setHealthValue();
     }
 
     GameObject FindNearestEnemy()
@@ -101,9 +187,38 @@ public class TowerController : MonoBehaviour
         return nearestEnemy;
     }
 
+    private void setHealthValue()
+    {
+        if (healthValue != null)
+        {
+            healthValue.text = "Health: " + currentHealth.ToString() + " / " + health.ToString();
+        }
+    }
+
+    private void setHealCostLabel()
+    {
+        if (this.healCostLabel != null)
+        {
+            int costBasedOnMissingHealth = (int)((this.health - this.currentHealth) / 10 * this.healCost);
+            healCostLabel.text = "Cost: " + costBasedOnMissingHealth.ToString();
+        }
+    }
+
+    private void refreshUpgradeTabValues()
+    {
+        towerName.text = nameString;
+        levelLabel.text = "Level " + (this.currentLevel + 1).ToString();
+        setHealthValue();
+        damageValue.text = "Damage: " + this.damage.ToString();
+        upgradeCostLabel.text = "Cost: " + this.upgradeCost.ToString();
+        setHealCostLabel();
+    }
+
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        this.setHealthValue();
+        this.setHealCostLabel();
 
         if (currentHealth <= 0)
         {
