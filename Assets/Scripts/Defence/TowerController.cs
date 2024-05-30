@@ -22,6 +22,7 @@ public class TowerController : MonoBehaviour
     public GameObject rangeIndicator;
     public string nameString;
     public AudioClip damageSoundClip;
+    public GameObject gridData;
 
     // Upgrade tab variables
     private Label towerName;
@@ -31,7 +32,6 @@ public class TowerController : MonoBehaviour
     private Label upgradeCostLabel;
     private Label healCostLabel;
 
-
     private float damageCooldown;
     private PlayerController playerController;
 
@@ -40,6 +40,8 @@ public class TowerController : MonoBehaviour
         damageCooldown = 0f;
         currentHealth = health;
         UpdateRangeIndicator();
+
+        gridData = GameObject.Find("GridData");
     }
 
     void Update()
@@ -115,7 +117,7 @@ public class TowerController : MonoBehaviour
 
     private void handleUpgrade()
     {
-        // Max level is 10 
+        // Max level is 10
         if (this.currentLevel == 9)
         {
             return;
@@ -157,9 +159,13 @@ public class TowerController : MonoBehaviour
 
     private void handleHeal()
     {
-        int costBasedOnMissingHealth = (int)((this.health - this.currentHealth) / 10 * this.healCost);
+        int costBasedOnMissingHealth = (int)(
+            (this.health - this.currentHealth) / 10 * this.healCost
+        );
 
-        if (playerController != null && !playerController.SubtractCurrency(costBasedOnMissingHealth))
+        if (
+            playerController != null && !playerController.SubtractCurrency(costBasedOnMissingHealth)
+        )
         {
             Debug.Log("Not Enough");
             return;
@@ -200,7 +206,9 @@ public class TowerController : MonoBehaviour
     {
         if (this.healCostLabel != null)
         {
-            int costBasedOnMissingHealth = (int)((this.health - this.currentHealth) / 10 * this.healCost);
+            int costBasedOnMissingHealth = (int)(
+                (this.health - this.currentHealth) / 10 * this.healCost
+            );
             healCostLabel.text = "Cost: " + costBasedOnMissingHealth.ToString();
         }
     }
@@ -223,7 +231,14 @@ public class TowerController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Destroy(gameObject);
+            gridData
+                .GetComponent<GridData>()
+                .removeTowerOnDeath(
+                    GridPositionUtil.get2DGridFromWorld(
+                        transform.position,
+                        gridData.GetComponent<Grid>()
+                    )
+                );
         }
     }
 
