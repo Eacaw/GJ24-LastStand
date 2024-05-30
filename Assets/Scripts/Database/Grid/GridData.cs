@@ -139,7 +139,6 @@ public class GridData : MonoBehaviour
                 VisualElement root = UIDocument.rootVisualElement;
                 VisualElement upgradeTab = root.Q<VisualElement>("UpgradeTab");
                 tc.isSelected(upgradeTab);
-
             }
         }
     }
@@ -194,6 +193,34 @@ public class GridData : MonoBehaviour
             foreach (Vector2Int cell in occupiedCells)
             {
                 this.gridOccupied.Remove(cell);
+            }
+        }
+    }
+
+    public void removeTowerOnDeath(Vector2Int gridPos)
+    {
+        if (this.objectIdMap.ContainsKey(gridPos))
+        {
+            String objectId = this.objectIdMap[gridPos];
+            ObjectData objectData = objectDatabaseController.GetObjectData(objectId);
+            List<Vector2Int> occupiedCells = objectData.getOccupiedCells(
+                GridPositionUtil.getGridFrom2DGrid(gridPos)
+            );
+            List<GameObject> removedObjects = this.grid3DObjects.removeObject(occupiedCells);
+            this.objectIdMap.Remove(gridPos);
+
+            foreach (GameObject gameObject in removedObjects)
+            {
+                Destroy(gameObject);
+            }
+
+            foreach (Vector2Int cell in occupiedCells)
+            {
+                this.gridOccupied.Remove(cell);
+                if (this.gridPathOccupied.ContainsKey(cell))
+                {
+                    this.gridPathOccupied.Remove(cell);
+                }
             }
         }
     }

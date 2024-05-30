@@ -7,7 +7,7 @@ public class EnemyMovement : MonoBehaviour
     public bool canStart = true;
     public int damage = 1;
     public int health = 10;
-    public float damageInterval = 1f;  // Time interval between damage applications
+    public float damageInterval = 1f; // Time interval between damage applications
     public int value = 1;
 
     // Algorithm Vars
@@ -188,7 +188,7 @@ public class EnemyMovement : MonoBehaviour
         {
             if (playerController != null)
             {
-                playerController.AddCurrency(value);  // Add currency to player
+                playerController.AddCurrency(value); // Add currency to player
             }
             Destroy(gameObject);
         }

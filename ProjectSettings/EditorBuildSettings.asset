@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/StartScene.unity
+    guid: 78613ec94cdd8d345a33e3e9c69d0e23
+  - enabled: 1
+    path: Assets/Scenes/PirateIsland.unity
+    guid: e7e7ec297deadf5498571e7dedda9add
   m_configObjects: {}
