@@ -6,6 +6,7 @@ public class Waves : MonoBehaviour
 {
     private Wave[] waves;
     public int waveCount = 50;
+    public float waveDelay = 5f;
 
     void Awake()
     {
@@ -32,7 +33,7 @@ public class Waves : MonoBehaviour
 
     public float GetDelayBetweenWaves()
     {
-        return 5f;
+        return waveDelay;
     }
 
     public float GetDelayBetweenEnemies()
