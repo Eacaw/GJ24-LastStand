@@ -245,6 +245,7 @@ MonoBehaviour:
   isPreview: 0
   rangeIndicator: {fileID: 3370591519689704402}
   nameString: Long John
+  damageSoundClip: {fileID: 8300000, guid: e8d18621988ca174c8afb743c12443f7, type: 3}
 --- !u!65 &1232771750246528760
 BoxCollider:
   m_ObjectHideFlags: 0
