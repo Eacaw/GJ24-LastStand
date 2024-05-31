@@ -109,6 +109,16 @@ public class EnemyMovement : MonoBehaviour
         return nearestTarget;
     }
 
+    public void checkForNewNearestTarget()
+    {
+        GameObject newTarget = FindNearestTarget();
+        if (newTarget != null)
+        {
+            target = newTarget;
+            path = null; // Reset the path so it can be recalculated
+        }
+    }
+
     void CalculatePath()
     {
         Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, this.grid);
@@ -141,7 +151,10 @@ public class EnemyMovement : MonoBehaviour
             animator.SetBool("isWalking", true);
             Vector3 targetPosition = path[targetIndex];
             Vector3 direction = (targetPosition - transform.position).normalized;
-            rb.MovePosition(transform.position + direction * speed * Time.fixedDeltaTime);
+            if (Vector3.Distance(transform.position, path[path.Count - 1]) > 1)
+            {
+                rb.MovePosition(transform.position + direction * speed * Time.fixedDeltaTime);
+            }
 
             if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
             {

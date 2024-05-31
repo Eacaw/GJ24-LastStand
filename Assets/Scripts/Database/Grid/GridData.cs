@@ -119,6 +119,7 @@ public class GridData : MonoBehaviour
                     gridPathOccupied.Add(cell, true);
                 }
             }
+            UpdateAllEnemiesTargets();
 
             if (!objectPlaced)
             {
@@ -144,6 +145,19 @@ public class GridData : MonoBehaviour
                 VisualElement root = UIDocument.rootVisualElement;
                 VisualElement upgradeTab = root.Q<VisualElement>("UpgradeTab");
                 tc.isSelected(upgradeTab);
+            }
+        }
+    }
+
+    private void UpdateAllEnemiesTargets()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
+            if (enemyMovement != null)
+            {
+                enemyMovement.checkForNewNearestTarget();
             }
         }
     }
