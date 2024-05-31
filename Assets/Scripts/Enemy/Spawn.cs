@@ -60,7 +60,7 @@ public class Spawn : MonoBehaviour
             yield return StartCoroutine(SpawnWave());
             yield return new WaitUntil(() => activeEnemies.Count == 0);
             currentWave++;
-            waveCounter.text = currentWave.ToString();
+            waveCounter.text = (currentWave + 1).ToString();
             yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
         }
 
