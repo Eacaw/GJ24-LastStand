@@ -23,6 +23,8 @@ public class TowerController : MonoBehaviour
     public string nameString;
     public AudioClip damageSoundClip;
     public GameObject gridData;
+    public bool isTreasure = false;
+    public HealthBar healthbar;
 
     // Upgrade tab variables
     private Label towerName;
@@ -42,6 +44,11 @@ public class TowerController : MonoBehaviour
         UpdateRangeIndicator();
 
         gridData = GameObject.Find("GridData");
+
+        if (healthbar != null)
+        {
+            healthbar.SetHealth(currentHealth / health);
+        }
     }
 
     void Update()
@@ -96,6 +103,10 @@ public class TowerController : MonoBehaviour
 
     public void isSelected(VisualElement upgradeTab)
     {
+        if (isTreasure)
+        {
+            return;
+        }
         // Display tab
         upgradeTab.style.display = DisplayStyle.Flex;
 
@@ -228,6 +239,12 @@ public class TowerController : MonoBehaviour
         currentHealth -= damage;
         this.setHealthValue();
         this.setHealCostLabel();
+
+        if (healthbar != null)
+        {
+            float healthPercentage = Mathf.Clamp(currentHealth, 0, health);
+            healthbar.SetHealth(healthPercentage / health);
+        }
 
         if (currentHealth <= 0)
         {
