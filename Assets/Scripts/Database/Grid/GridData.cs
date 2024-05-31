@@ -51,6 +51,11 @@ public class GridData : MonoBehaviour
         this.gridPreview.GetComponent<GridPreview>().setGridSize(this.gridSize);
         this.inBuildMode = false;
 
+        gridOccupied[new Vector2Int(0, 0)] = true;
+        gridOccupied[new Vector2Int(-1, 0)] = true;
+        gridOccupied[new Vector2Int(-1, -1)] = true;
+        gridOccupied[new Vector2Int(0, -1)] = true;
+
         // Setup the input manager event actions
         inputManager.OnLmb += AddObject;
         inputManager.OnR += OnRotate;
