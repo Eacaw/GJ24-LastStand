@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class UI : MonoBehaviour
 {
@@ -53,5 +54,24 @@ public class UI : MonoBehaviour
         Button closeButton = upgradeTab.Q<Button>("CloseButton");
         closeButton.clicked += () => upgradeTab.style.display = DisplayStyle.None;
         upgradeTab.style.display = DisplayStyle.None;
+
+        closeGameOverPanel();
+
+        Button GameOverMenuButton = root.Q<Button>("GameOverMenuButton");
+        GameOverMenuButton.clicked += () => SceneManager.LoadScene("StartScene");
+    }
+
+    public void openGameOverPanel()
+    {
+        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        VisualElement gameOverPanel = root.Q<VisualElement>("GameOverPanel");
+        gameOverPanel.style.display = DisplayStyle.Flex;
+    }
+
+    private void closeGameOverPanel()
+    {
+        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        VisualElement gameOverPanel = root.Q<VisualElement>("GameOverPanel");
+        gameOverPanel.style.display = DisplayStyle.None;
     }
 }
