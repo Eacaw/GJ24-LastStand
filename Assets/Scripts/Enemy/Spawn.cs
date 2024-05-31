@@ -29,11 +29,15 @@ public class Spawn : MonoBehaviour
     {
         root = UIDocument.rootVisualElement;
         waveCounter = root.Q<Label>("WaveCount");
-        spawnPoints = new Vector3[maxEnemies];
+        spawnPoints = new Vector3[8];
         spawnPoints[0] = new Vector3(-15, 0, 0);
         spawnPoints[1] = new Vector3(15, 0, 0);
         spawnPoints[2] = new Vector3(0, 0, 15);
         spawnPoints[3] = new Vector3(0, 0, -15);
+        spawnPoints[4] = new Vector3(12.5f, 0, 12.5f);
+        spawnPoints[5] = new Vector3(-12.5f, 0, 12.5f);
+        spawnPoints[6] = new Vector3(12.5f, 0, -12.5f);
+        spawnPoints[7] = new Vector3(-12.5f, 0, -12.5f);
 
         waves = GetComponent<Waves>();
         if (waves == null)
@@ -90,7 +94,7 @@ public class Spawn : MonoBehaviour
     {
         GameObject enemy = Instantiate(
             enemyPrefabs[enemyType],
-            spawnPoints[enemiesSpawned % 4],
+            spawnPoints[Random.Range(0, 8)],
             Quaternion.identity
         );
         enemiesSpawned++;
