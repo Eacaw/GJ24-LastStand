@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     public int health = 10;
     public float damageInterval = 1f; // Time interval between damage applications
     public int value = 1;
+    public int scoreValue = 1;
 
     // Algorithm Vars
     private List<Vector3> path;
@@ -185,7 +186,6 @@ public class EnemyMovement : MonoBehaviour
                 AudioPoolManager.Instance.PlaySound(damageSoundClip, transform.position);
             }
         }
-
     }
 
     public void TakeDamage(int damage)
@@ -195,7 +195,8 @@ public class EnemyMovement : MonoBehaviour
         {
             if (playerController != null)
             {
-                playerController.AddCurrency(value); // Add currency to player
+                playerController.AddCurrency(value);
+                playerController.AddScore(scoreValue);
             }
             Destroy(gameObject);
         }
