@@ -283,6 +283,10 @@ public class TowerController : MonoBehaviour
 
     void DealDamageToEnemiesInRange()
     {
+        if (isPreview)
+        {
+            return;
+        }
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range);
         Animator animator = gameObject.GetComponent<Animator>();
 
