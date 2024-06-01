@@ -48,6 +48,7 @@ public class UI : MonoBehaviour
                 enemy.GetComponent<EnemyMovement>().canStart = true;
             }
             gridData.endBuildMode();
+            startButton.style.display = DisplayStyle.None;
         };
 
         VisualElement upgradeTab = root.Q<VisualElement>("UpgradeTab");
