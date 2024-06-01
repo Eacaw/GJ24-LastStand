@@ -27,9 +27,9 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        target = FindNearestTarget();
         GameObject gridData = GameObject.Find("GridData");
         grid = gridData.GetComponent<Grid>();
+        target = FindTargetOrBarricade();
         damageCooldown = 0f;
         animator = GetComponent<Animator>();
 
@@ -45,7 +45,7 @@ public class EnemyMovement : MonoBehaviour
         // Check if the current target is still active
         if (target == null || !target.activeInHierarchy)
         {
-            target = FindNearestTarget();
+            target = FindTargetOrBarricade();
             path = null; // Reset the path so it can be recalculated
         }
 
@@ -84,9 +84,37 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    GameObject FindNearestTarget()
+    GameObject FindTargetOrBarricade()
     {
-        GameObject[] targets = GameObject.FindGameObjectsWithTag("Target");
+        GameObject nearestTarget = FindNearestTarget("Target");
+
+        if (!this.grid)
+        {
+            return null;
+        }
+
+        if (nearestTarget != null)
+        {
+            Vector3Int gridPos = GridPositionUtil.getGridFromWorld(transform.position, this.grid);
+            Vector3Int targetGridPos = GridPositionUtil.getGridFromWorld(
+                nearestTarget.transform.position,
+                this.grid
+            );
+            List<Vector3Int> intPath = Pathfinding.Instance.FindPath(gridPos, targetGridPos);
+
+            if (intPath != null)
+            {
+                return nearestTarget; // Path is possible, return the target
+            }
+        }
+
+        // Fallback to the nearest barricade if no path to a target is found
+        return FindNearestTarget("Barricade");
+    }
+
+    GameObject FindNearestTarget(string tag)
+    {
+        GameObject[] targets = GameObject.FindGameObjectsWithTag(tag);
         GameObject nearestTarget = null;
         float shortestDistance = Mathf.Infinity;
 
@@ -111,7 +139,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void checkForNewNearestTarget()
     {
-        GameObject newTarget = FindNearestTarget();
+        GameObject newTarget = FindTargetOrBarricade();
         if (newTarget != null)
         {
             target = newTarget;
@@ -132,15 +160,18 @@ public class EnemyMovement : MonoBehaviour
         {
             foreach (Vector3Int pos in intPath)
             {
-                path.Add((Vector3)pos);
+                path.Add(GridPositionUtil.getWorldCellCenter(pos, this.grid)); // Adjust path nodes to cell center
             }
             targetIndex = 0;
         }
         else
         {
             path = null;
-            target = FindNearestTarget();
-            MoveTowardsTarget(target.transform.position);
+            target = FindTargetOrBarricade();
+            if (target != null)
+            {
+                MoveTowardsTarget(target.transform.position);
+            }
         }
     }
 
@@ -187,16 +218,19 @@ public class EnemyMovement : MonoBehaviour
 
     void DamageTarget()
     {
-        TowerController tc = target.GetComponent<TowerController>();
-        if (tc != null)
+        if (Vector3.Distance(transform.position, target.transform.position) <= 1)
         {
-            tc.TakeDamage(damage);
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isAttacking", true);
-
-            if (damageSoundClip != null)
+            TowerController tc = target.GetComponent<TowerController>();
+            if (tc != null)
             {
-                AudioPoolManager.Instance.PlaySound(damageSoundClip, transform.position);
+                tc.TakeDamage(damage);
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isAttacking", true);
+
+                if (damageSoundClip != null)
+                {
+                    AudioPoolManager.Instance.PlaySound(damageSoundClip, transform.position);
+                }
             }
         }
     }

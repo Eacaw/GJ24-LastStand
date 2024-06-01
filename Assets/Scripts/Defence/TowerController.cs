@@ -77,6 +77,18 @@ public class TowerController : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        if (isObstacle)
+        {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.GetComponent<EnemyMovement>().checkForNewNearestTarget();
+            }
+        }
+    }
+
     public bool TowerPlaced()
     {
         GameObject player = GameObject.Find("PlayerController");
@@ -143,12 +155,12 @@ public class TowerController : MonoBehaviour
         ++this.currentLevel;
 
         // Increase health
-        this.health = (int)(this.currentLevel * 15) + this.health;
+        this.health = (int)(this.currentLevel * 10) + this.health;
         this.currentHealth = this.health;
         setHealthValue();
 
         // Increase damage
-        this.damage = (int)(this.currentLevel * 10) + this.damage;
+        this.damage = (int)(this.currentLevel * 5) + this.damage;
 
         // If level 5 increase max targets
         if (this.currentLevel == 4)
@@ -163,7 +175,7 @@ public class TowerController : MonoBehaviour
         }
 
         // Increase upgrade cost for next upgrade
-        this.upgradeCost = 5 + (5 * this.currentLevel);
+        this.upgradeCost = 10 + (5 * this.currentLevel);
 
         refreshUpgradeTabValues();
     }

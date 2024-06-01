@@ -67,7 +67,7 @@ public class Spawn : MonoBehaviour
 
         while (currentWave < waves.GetTotalWaves())
         {
-            yield return StartCoroutine(SpawnWave());
+            yield return StartCoroutine(SpawnWave(currentWave));
             yield return new WaitUntil(() => activeEnemies.Count == 0);
             currentWave++;
             waveCounter.text = (currentWave + 1).ToString();
@@ -78,16 +78,40 @@ public class Spawn : MonoBehaviour
         isSpawning = false;
     }
 
-    IEnumerator SpawnWave()
+    IEnumerator SpawnWave(int waveNumber)
     {
-        int enemiesInWave = waves.GetEnemiesInWave(currentWave);
-        int[] enemyTypes = waves.GetWave(currentWave).Enemies;
+        int enemiesInWave = waves.GetEnemiesInWave(waveNumber);
+        int[] enemyTypes = waves.GetWave(waveNumber).Enemies;
 
         for (int i = 0; i < enemiesInWave; i++)
         {
-            SpawnEnemy(enemyTypes[i]);
+            int enemyType = enemyTypes[i];
+            GameObject enemy = Instantiate(
+                enemyPrefabs[enemyType],
+                spawnPoints[Random.Range(0, 8)],
+                Quaternion.identity
+            );
+            EnemyMovement enemyMovementScript = enemy.GetComponent<EnemyMovement>();
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            if (enemyMovementScript != null && enemyScript != null)
+            {
+                ScaleEnemyStats(enemyMovementScript, waveNumber);
+                enemyScript.OnEnemyDeath += HandleEnemyDeath;
+            }
+            else
+            {
+                Debug.LogError("Enemy prefab missing Enemy script.");
+            }
+            activeEnemies.Add(enemy);
             yield return new WaitForSeconds(spawnInterval);
         }
+    }
+
+    void ScaleEnemyStats(EnemyMovement enemy, int waveNumber)
+    {
+        float scaleFactor = 1 + (waveNumber * 0.1f);
+        enemy.health = (int)(enemy.health * scaleFactor);
+        enemy.damage = (int)(enemy.damage * scaleFactor);
     }
 
     void SpawnEnemy(int enemyType)
