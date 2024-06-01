@@ -1775,6 +1775,10 @@ MonoBehaviour:
   objectDatabaseController: {fileID: 1487026736}
   cameraController: {fileID: 330585548}
   spawncontroller: {fileID: 1187763061}
+  barricadeImage: {fileID: 2800000, guid: 1cf8d1f8086788243b393eb95d397532, type: 3}
+  redbeardImage: {fileID: 2800000, guid: 8cc27a3592497304ba2890a86c88b88a, type: 3}
+  longJohnImage: {fileID: 2800000, guid: 08805b58a84c6384cbe0f040b260ed49, type: 3}
+  ironMaryImage: {fileID: 2800000, guid: e0f03bf782f3f32469ff63aaeb73b034, type: 3}
 --- !u!114 &813827899
 MonoBehaviour:
   m_ObjectHideFlags: 0

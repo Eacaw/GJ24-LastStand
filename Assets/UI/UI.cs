@@ -11,26 +11,73 @@ public class UI : MonoBehaviour
     public ObjectDatabaseController objectDatabaseController;
     public CameraController cameraController;
     public Spawn spawncontroller;
+    public Texture barricadeImage;
+    public Texture redbeardImage;
+    public Texture longJohnImage;
+    public Texture ironMaryImage;
 
     private void OnEnable()
     {
         VisualElement root = GetComponent<UIDocument>().rootVisualElement;
 
+        VisualElement TooltipPanel = root.Q<VisualElement>("TooltipPanel");
+        TooltipPanel.style.display = DisplayStyle.None;
+
         Button RedbeardButton = root.Q<Button>("Redbeard");
         string redbeardId = objectDatabaseController.GetObjectDataByName("Redbeard").Id;
-        RedbeardButton.clicked += () => gridData.startBuildMode(redbeardId);
+        RedbeardButton.clicked += () =>
+        {
+            gridData.startBuildMode(redbeardId);
+            TooltipPanel.style.display = DisplayStyle.Flex;
+            TooltipPanel.Q<Label>("tooltipTitle").text = "Redbeard";
+            TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 100";
+            TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 20";
+            TooltipPanel.Q<Label>("tooltipRange").text = "Range - 3";
+            TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
+                (StyleBackground)redbeardImage;
+        };
 
         Button LongJohnButton = root.Q<Button>("LongJohn");
         string longJohnId = objectDatabaseController.GetObjectDataByName("LongJohn").Id;
-        LongJohnButton.clicked += () => gridData.startBuildMode(longJohnId);
+        LongJohnButton.clicked += () =>
+        {
+            gridData.startBuildMode(longJohnId);
+            TooltipPanel.style.display = DisplayStyle.Flex;
+            TooltipPanel.Q<Label>("tooltipTitle").text = "Long John";
+            TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 75";
+            TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 15";
+            TooltipPanel.Q<Label>("tooltipRange").text = "Range - 4";
+            TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
+                (StyleBackground)longJohnImage;
+        };
 
         Button IronMaryButton = root.Q<Button>("IronMary");
         string ironMaryId = objectDatabaseController.GetObjectDataByName("IronMary").Id;
-        IronMaryButton.clicked += () => gridData.startBuildMode(ironMaryId);
+        IronMaryButton.clicked += () =>
+        {
+            gridData.startBuildMode(ironMaryId);
+            TooltipPanel.style.display = DisplayStyle.Flex;
+            TooltipPanel.Q<Label>("tooltipTitle").text = "Iron Mary";
+            TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 95";
+            TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 25";
+            TooltipPanel.Q<Label>("tooltipRange").text = "Range - 5";
+            TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
+                (StyleBackground)ironMaryImage;
+        };
 
         Button BarricadeButton = root.Q<Button>("Barricade");
         string barricadeId = objectDatabaseController.GetObjectDataByName("Barricade").Id;
-        BarricadeButton.clicked += () => gridData.startBuildMode(barricadeId);
+        BarricadeButton.clicked += () =>
+        {
+            gridData.startBuildMode(barricadeId);
+            TooltipPanel.style.display = DisplayStyle.Flex;
+            TooltipPanel.Q<Label>("tooltipTitle").text = "Barricade";
+            TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 100";
+            TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 0";
+            TooltipPanel.Q<Label>("tooltipRange").text = "Range - 0";
+            TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
+                (StyleBackground)barricadeImage;
+        };
 
         Button RotateLeft = root.Q<Button>("RotateLeft");
         RotateLeft.clicked += () => cameraController.RotateCameraLeft();

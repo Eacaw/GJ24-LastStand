@@ -185,8 +185,10 @@ public class GridData : MonoBehaviour
         this.inBuildMode = false;
         this.previewSystem.stopPreview();
         this.currentObjectId = null;
-        // This is set to false so that we can get clicks mid game
-        // gridPreview.SetActive(false);
+        VisualElement root = UIDocument.rootVisualElement;
+
+        VisualElement TooltipPanel = root.Q<VisualElement>("TooltipPanel");
+        TooltipPanel.style.display = DisplayStyle.None;
     }
 
     private void removeObject()
