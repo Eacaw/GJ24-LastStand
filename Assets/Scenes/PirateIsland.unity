@@ -497,7 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a667675df54b9a449acc566d32ab9bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currency: 20
+  currency: 75
   UIDocument: {fileID: 813827899}
   score: 0
 --- !u!4 &196033964
