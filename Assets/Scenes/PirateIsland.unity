@@ -2974,7 +2974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e65a7d2add7cc84ca473e0d0f2706af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 20, y: 25}
+  gridSize: {x: 20, y: 20}
   gridPreviewPrefab: {fileID: 2706230884323932871, guid: eb8f484303638e84393cf2cb401ede4b,
     type: 3}
   objectDatabaseController: {fileID: 1487026736}
@@ -3280,7 +3280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveCount: 50
-  waveDelay: 1
+  waveDelay: 2.5
 --- !u!1001 &1189872175
 PrefabInstance:
   m_ObjectHideFlags: 0
