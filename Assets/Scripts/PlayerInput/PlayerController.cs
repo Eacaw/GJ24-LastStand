@@ -6,14 +6,19 @@ public class PlayerController : MonoBehaviour
     public int currency = 20; // Initial currency balance
     public UIDocument UIDocument;
 
+    public int score = 0;
+
     private VisualElement root;
     private Label currencyCounter;
+    private Label scoreCounter;
 
     void Start()
     {
         root = UIDocument.rootVisualElement;
         currencyCounter = root.Q<Label>("CurrencyCount");
         currencyCounter.text = currency.ToString();
+        scoreCounter = root.Q<Label>("ScoreCount");
+        scoreCounter.text = score.ToString();
     }
 
     public void AddCurrency(int amount)
@@ -34,5 +39,11 @@ public class PlayerController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void AddScore(int amount)
+    {
+        score += amount;
+        scoreCounter.text = score.ToString();
     }
 }

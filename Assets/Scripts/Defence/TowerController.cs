@@ -256,6 +256,16 @@ public class TowerController : MonoBehaviour
                         gridData.GetComponent<Grid>()
                     )
                 );
+
+            if (isTreasure)
+            {
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                foreach (GameObject enemy in enemies)
+                {
+                    enemy.GetComponent<EnemyMovement>().canStart = false;
+                }
+                GameObject.Find("UI").GetComponent<UI>().openGameOverPanel();
+            }
         }
     }
 

@@ -22,9 +22,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
-        VisualElement instructionsPanel = root.Q<VisualElement>("instructionsPanel");
-        instructionsPanel.style.display = DisplayStyle.None;
+        CloseInstructionsPanel();
     }
 
     public void StartGame()

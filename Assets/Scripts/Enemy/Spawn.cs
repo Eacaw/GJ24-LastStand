@@ -23,6 +23,7 @@ public class Spawn : MonoBehaviour
     public UIDocument UIDocument;
     private VisualElement root;
     private Label waveCounter;
+    private PlayerController playerController;
 
     void Start()
     {
@@ -38,6 +39,11 @@ public class Spawn : MonoBehaviour
         if (waves == null)
         {
             Debug.LogError("Waves component not found on this GameObject.");
+        }
+        GameObject player = GameObject.Find("PlayerController");
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
         }
     }
 
@@ -60,7 +66,8 @@ public class Spawn : MonoBehaviour
             yield return StartCoroutine(SpawnWave());
             yield return new WaitUntil(() => activeEnemies.Count == 0);
             currentWave++;
-            waveCounter.text = currentWave.ToString();
+            waveCounter.text = (currentWave + 1).ToString();
+            playerController.AddScore(10);
             yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
         }
 
