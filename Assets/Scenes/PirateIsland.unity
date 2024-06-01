@@ -3246,7 +3246,7 @@ MonoBehaviour:
   - {fileID: 4082520335596737710, guid: ae49abadbe4b56240ba3af91cf187b77, type: 3}
   - {fileID: 2565949385458423277, guid: 73caffe31f9d29d419efae6031123ae3, type: 3}
   - {fileID: 3002081880999876551, guid: f3319b4cf5844b5499536d48d2fe12a6, type: 3}
-  spawnInterval: 0.1
+  spawnInterval: 0.25
   maxEnemies: 100
   enemiesSpawned: 0
   canStart: 0
