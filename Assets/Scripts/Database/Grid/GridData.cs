@@ -45,7 +45,7 @@ public class GridData : MonoBehaviour
         this.grid = GetComponent<Grid>();
         this.gridPreview = Instantiate(
             gridPreviewPrefab,
-            new Vector3(0, 0, 0),
+            new Vector3(0, 0.07f, 0),
             Quaternion.identity
         );
         this.gridPreview.GetComponent<GridPreview>().setGridSize(this.gridSize);
