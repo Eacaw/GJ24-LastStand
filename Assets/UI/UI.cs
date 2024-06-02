@@ -23,6 +23,9 @@ public class UI : MonoBehaviour
         VisualElement TooltipPanel = root.Q<VisualElement>("TooltipPanel");
         TooltipPanel.style.display = DisplayStyle.None;
 
+        VisualElement mainMenuPanel = root.Q<VisualElement>("MenuPanel");
+        mainMenuPanel.style.display = DisplayStyle.None;
+
         Button RedbeardButton = root.Q<Button>("Redbeard");
         string redbeardId = objectDatabaseController.GetObjectDataByName("Redbeard").Id;
         RedbeardButton.clicked += () =>
@@ -33,6 +36,7 @@ public class UI : MonoBehaviour
             TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 100";
             TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 20";
             TooltipPanel.Q<Label>("tooltipRange").text = "Range - 3";
+            TooltipPanel.Q<Label>("tooltipCost").text = "Cost - 10";
             TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
                 (StyleBackground)redbeardImage;
         };
@@ -47,6 +51,7 @@ public class UI : MonoBehaviour
             TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 75";
             TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 15";
             TooltipPanel.Q<Label>("tooltipRange").text = "Range - 4";
+            TooltipPanel.Q<Label>("tooltipCost").text = "Cost - 20";
             TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
                 (StyleBackground)longJohnImage;
         };
@@ -61,6 +66,7 @@ public class UI : MonoBehaviour
             TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 95";
             TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 25";
             TooltipPanel.Q<Label>("tooltipRange").text = "Range - 5";
+            TooltipPanel.Q<Label>("tooltipCost").text = "Cost - 25";
             TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
                 (StyleBackground)ironMaryImage;
         };
@@ -75,6 +81,7 @@ public class UI : MonoBehaviour
             TooltipPanel.Q<Label>("tooltipHealth").text = "Health - 100";
             TooltipPanel.Q<Label>("tooltipDamage").text = "Damage - 0";
             TooltipPanel.Q<Label>("tooltipRange").text = "Range - 0";
+            TooltipPanel.Q<Label>("tooltipCost").text = "Cost - 5";
             TooltipPanel.Q<VisualElement>("tooltipImage").style.backgroundImage =
                 (StyleBackground)barricadeImage;
         };
@@ -107,6 +114,42 @@ public class UI : MonoBehaviour
 
         Button GameOverMenuButton = root.Q<Button>("GameOverMenuButton");
         GameOverMenuButton.clicked += () => SceneManager.LoadScene("StartScene");
+
+        Button MenuButton = root.Q<Button>("MenuButton");
+        MenuButton.clicked += () => openMainMenuPanel();
+
+        Button MenuCloseButton = root.Q<Button>("MenuCloseButton");
+        MenuCloseButton.clicked += () => closeMainMenuPanel();
+
+        Button RestartMenuButton = root.Q<Button>("RestartMenuButton");
+        RestartMenuButton.clicked += () =>
+        {
+            SceneManager.LoadScene("PirateIsland");
+            Time.timeScale = 1;
+        };
+
+        Button MainMenuButton = root.Q<Button>("MainMenuButton");
+        MainMenuButton.clicked += () =>
+        {
+            SceneManager.LoadScene("StartScene");
+            Time.timeScale = 1;
+        };
+    }
+
+    public void openMainMenuPanel()
+    {
+        Time.timeScale = 0;
+        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        VisualElement mainMenuPanel = root.Q<VisualElement>("MenuPanel");
+        mainMenuPanel.style.display = DisplayStyle.Flex;
+    }
+
+    public void closeMainMenuPanel()
+    {
+        Time.timeScale = 1;
+        VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+        VisualElement mainMenuPanel = root.Q<VisualElement>("MenuPanel");
+        mainMenuPanel.style.display = DisplayStyle.None;
     }
 
     public void openGameOverPanel()
