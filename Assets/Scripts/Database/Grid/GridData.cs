@@ -214,6 +214,8 @@ public class GridData : MonoBehaviour
             foreach (Vector2Int cell in occupiedCells)
             {
                 this.gridOccupied.Remove(cell);
+                this.gridPathOccupied.Remove(cell);
+                this.objectIdMap.Remove(cell);
             }
         }
     }
