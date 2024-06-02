@@ -45,7 +45,7 @@ public class GridData : MonoBehaviour
         this.grid = GetComponent<Grid>();
         this.gridPreview = Instantiate(
             gridPreviewPrefab,
-            new Vector3(0, 0, 0),
+            new Vector3(0, 0.07f, 0),
             Quaternion.identity
         );
         this.gridPreview.GetComponent<GridPreview>().setGridSize(this.gridSize);
@@ -119,6 +119,7 @@ public class GridData : MonoBehaviour
                     gridPathOccupied.Add(cell, true);
                 }
             }
+            UpdateAllEnemiesTargets();
 
             if (!objectPlaced)
             {
@@ -148,6 +149,19 @@ public class GridData : MonoBehaviour
         }
     }
 
+    private void UpdateAllEnemiesTargets()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            EnemyMovement enemyMovement = enemy.GetComponent<EnemyMovement>();
+            if (enemyMovement != null)
+            {
+                enemyMovement.checkForNewNearestTarget();
+            }
+        }
+    }
+
     private void OnRotate()
     {
         if (inBuildMode)
@@ -171,8 +185,10 @@ public class GridData : MonoBehaviour
         this.inBuildMode = false;
         this.previewSystem.stopPreview();
         this.currentObjectId = null;
-        // This is set to false so that we can get clicks mid game
-        // gridPreview.SetActive(false);
+        VisualElement root = UIDocument.rootVisualElement;
+
+        VisualElement TooltipPanel = root.Q<VisualElement>("TooltipPanel");
+        TooltipPanel.style.display = DisplayStyle.None;
     }
 
     private void removeObject()
@@ -198,6 +214,8 @@ public class GridData : MonoBehaviour
             foreach (Vector2Int cell in occupiedCells)
             {
                 this.gridOccupied.Remove(cell);
+                this.gridPathOccupied.Remove(cell);
+                this.objectIdMap.Remove(cell);
             }
         }
     }

@@ -236,17 +236,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damage: 30
-  range: 2
+  damage: 20
+  range: 3
   damageInterval: 1
   maxTargets: 1
   isObstacle: 0
-  cost: 5
-  upgradeCost: 5
+  cost: 10
+  upgradeCost: 10
   isPreview: 0
   rangeIndicator: {fileID: 4414146273898575904}
   nameString: Redbeard
   damageSoundClip: {fileID: 8300000, guid: e8d18621988ca174c8afb743c12443f7, type: 3}
+  gridData: {fileID: 0}
+  isTreasure: 0
+  healthbar: {fileID: 0}
 --- !u!54 &3864213400523037649
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -272,7 +275,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!65 &3406400162901247236
 BoxCollider:

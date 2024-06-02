@@ -13,7 +13,8 @@ public class HealthBar : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        originalWidth = healthBar.rectTransform.sizeDelta.x;
+        originalWidth = 3;
+        SetHealth(1);
     }
 
     void Update()

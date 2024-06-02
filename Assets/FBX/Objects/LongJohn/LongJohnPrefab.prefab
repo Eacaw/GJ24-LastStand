@@ -235,17 +235,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 75
-  damage: 25
-  range: 2
+  damage: 15
+  range: 4
   damageInterval: 1
   maxTargets: 1
   isObstacle: 0
-  cost: 10
-  upgradeCost: 5
+  cost: 20
+  upgradeCost: 15
   isPreview: 0
   rangeIndicator: {fileID: 3370591519689704402}
   nameString: Long John
   damageSoundClip: {fileID: 8300000, guid: e8d18621988ca174c8afb743c12443f7, type: 3}
+  gridData: {fileID: 0}
+  isTreasure: 0
+  healthbar: {fileID: 0}
 --- !u!65 &1232771750246528760
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -292,7 +295,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!95 &1022312220451354217
 Animator:

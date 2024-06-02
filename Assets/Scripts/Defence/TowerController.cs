@@ -47,7 +47,7 @@ public class TowerController : MonoBehaviour
 
         if (healthbar != null)
         {
-            healthbar.SetHealth(currentHealth / health);
+            healthbar.SetHealth(1);
         }
     }
 
@@ -73,6 +73,18 @@ public class TowerController : MonoBehaviour
             {
                 DealDamageToEnemiesInRange();
                 damageCooldown = damageInterval;
+            }
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (isObstacle)
+        {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.GetComponent<EnemyMovement>().checkForNewNearestTarget();
             }
         }
     }
@@ -143,12 +155,12 @@ public class TowerController : MonoBehaviour
         ++this.currentLevel;
 
         // Increase health
-        this.health = (int)(this.currentLevel * 15) + this.health;
+        this.health = (int)(this.currentLevel * 10) + this.health;
         this.currentHealth = this.health;
         setHealthValue();
 
         // Increase damage
-        this.damage = (int)(this.currentLevel * 10) + this.damage;
+        this.damage = (int)(this.currentLevel * 5) + this.damage;
 
         // If level 5 increase max targets
         if (this.currentLevel == 4)
@@ -163,7 +175,7 @@ public class TowerController : MonoBehaviour
         }
 
         // Increase upgrade cost for next upgrade
-        this.upgradeCost = 5 + (5 * this.currentLevel);
+        this.upgradeCost = 10 + (5 * this.currentLevel);
 
         refreshUpgradeTabValues();
     }
@@ -259,6 +271,7 @@ public class TowerController : MonoBehaviour
 
             if (isTreasure)
             {
+                Debug.Log("Treasure Destroyed");
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (GameObject enemy in enemies)
                 {
@@ -271,6 +284,10 @@ public class TowerController : MonoBehaviour
 
     void DealDamageToEnemiesInRange()
     {
+        if (isPreview)
+        {
+            return;
+        }
         Collider[] enemiesInRange = Physics.OverlapSphere(transform.position, range);
         Animator animator = gameObject.GetComponent<Animator>();
 

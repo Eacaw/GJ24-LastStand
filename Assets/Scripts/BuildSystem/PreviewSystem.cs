@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using UnityEngine;
 
 public class PreviewSystem : MonoBehaviour
@@ -19,10 +18,26 @@ public class PreviewSystem : MonoBehaviour
     private Color sadColor = new Color(1, 0, 0, 0.5f);
 
     private ObjectData objectData;
+    private Material previewMaterial;
 
     private void Start()
     {
         cellIndicators = new List<GameObject>();
+
+        // Create a new transparent URP material
+        previewMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        previewMaterial.SetFloat("_Surface", 1); // Transparent surface type
+        previewMaterial.SetFloat("_Blend", 0); // Alpha blending
+        previewMaterial.SetFloat("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        previewMaterial.SetFloat(
+            "_DstBlend",
+            (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha
+        );
+        previewMaterial.SetFloat("_ZWrite", 0);
+        previewMaterial.EnableKeyword("_ALPHATEST_ON");
+        previewMaterial.EnableKeyword("_ALPHABLEND_ON");
+        previewMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        previewMaterial.renderQueue = 3000;
     }
 
     public void startPreview(ObjectData objectData)
@@ -34,6 +49,7 @@ public class PreviewSystem : MonoBehaviour
         TowerController tc = this.previewInstance.GetComponent<TowerController>();
         tc.setIsPreview();
 
+        ApplyPreviewMaterial(previewInstance);
         prepareCellIndicator();
     }
 
@@ -53,6 +69,7 @@ public class PreviewSystem : MonoBehaviour
                 Quaternion.identity
             );
             cellIndicators.Add(cellIndicator);
+            ApplyPreviewMaterial(cellIndicator);
             UpdateRendererColor(cellIndicator, true);
         }
     }
@@ -68,15 +85,13 @@ public class PreviewSystem : MonoBehaviour
         UpdateRendererColor(previewInstance, canBePlaced);
 
         List<Vector2Int> occupiedCells = this.getOccupiedCells(gridPos);
-        foreach (GameObject cellIndicator in cellIndicators)
+        for (int i = 0; i < cellIndicators.Count; i++)
         {
-            int index = cellIndicators.IndexOf(cellIndicator);
-            // TODO - Get rid of this magic number elegantly
-            // TODO - Needs to be WorldCenterCell + given offset
+            GameObject cellIndicator = cellIndicators[i];
             cellIndicator.transform.position = new Vector3(
-                occupiedCells[index].x + 0.5f,
+                occupiedCells[i].x + 0.5f,
                 0,
-                occupiedCells[index].y + 0.5f
+                occupiedCells[i].y + 0.5f
             );
             UpdateRendererColor(cellIndicator, canBePlaced);
         }
@@ -91,8 +106,8 @@ public class PreviewSystem : MonoBehaviour
         {
             Destroy(cellIndicator);
         }
-        this.cellIndicators = new List<GameObject>();
-        this.objectData = null;
+        cellIndicators.Clear();
+        objectData = null;
     }
 
     public List<Vector2Int> getOccupiedCells(Vector3Int gridPos)
@@ -107,13 +122,28 @@ public class PreviewSystem : MonoBehaviour
         {
             foreach (Material material in renderer.materials)
             {
-                material.color =
+                Color color =
                     canBePlaced
-                    && this.playerController.currency
-                        >= this.previewInstance.GetComponent<TowerController>().cost
+                    && playerController.currency
+                        >= previewInstance.GetComponent<TowerController>().cost
                         ? happyColor
                         : sadColor;
+                material.color = color;
             }
+        }
+    }
+
+    private void ApplyPreviewMaterial(GameObject gameObject)
+    {
+        Renderer[] objectRenderers = gameObject.GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in objectRenderers)
+        {
+            Material[] newMaterials = new Material[renderer.materials.Length];
+            for (int i = 0; i < renderer.materials.Length; i++)
+            {
+                newMaterials[i] = new Material(previewMaterial);
+            }
+            renderer.materials = newMaterials;
         }
     }
 }

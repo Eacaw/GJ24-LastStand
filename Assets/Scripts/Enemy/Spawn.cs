@@ -21,6 +21,7 @@ public class Spawn : MonoBehaviour
     private List<GameObject> activeEnemies = new List<GameObject>();
 
     public UIDocument UIDocument;
+    private ProgressBar progressBar;
     private VisualElement root;
     private Label waveCounter;
     private PlayerController playerController;
@@ -29,11 +30,23 @@ public class Spawn : MonoBehaviour
     {
         root = UIDocument.rootVisualElement;
         waveCounter = root.Q<Label>("WaveCount");
-        spawnPoints = new Vector3[maxEnemies];
+        progressBar = root.Q<ProgressBar>("NextWaveProgressBar");
+        var actualBar = root.Q(className: "unity-progress-bar__progress");
+        var bar__background = root.Q(className: "unity-progress-bar__background");
+        actualBar.style.backgroundColor = new Color(0, 1, 0, 0.5f);
+        bar__background.style.backgroundColor = new Color(2, 2, 2, 0.3f);
+
+        progressBar.style.display = DisplayStyle.None; // Hide the progress bar initially
+
+        spawnPoints = new Vector3[8];
         spawnPoints[0] = new Vector3(-15, 0, 0);
         spawnPoints[1] = new Vector3(15, 0, 0);
         spawnPoints[2] = new Vector3(0, 0, 15);
         spawnPoints[3] = new Vector3(0, 0, -15);
+        spawnPoints[4] = new Vector3(12.5f, 0, 12.5f);
+        spawnPoints[5] = new Vector3(-12.5f, 0, 12.5f);
+        spawnPoints[6] = new Vector3(12.5f, 0, -12.5f);
+        spawnPoints[7] = new Vector3(-12.5f, 0, -12.5f);
 
         waves = GetComponent<Waves>();
         if (waves == null)
@@ -59,38 +72,82 @@ public class Spawn : MonoBehaviour
     {
         isSpawning = true;
 
-        yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
-
         while (currentWave < waves.GetTotalWaves())
         {
-            yield return StartCoroutine(SpawnWave());
+            // Show and fill the progress bar between waves
+            yield return StartCoroutine(FillProgressBar(waves.GetDelayBetweenWaves()));
+
+            yield return StartCoroutine(SpawnWave(currentWave));
             yield return new WaitUntil(() => activeEnemies.Count == 0);
             currentWave++;
             waveCounter.text = (currentWave + 1).ToString();
             playerController.AddScore(10);
-            yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
         }
 
         isSpawning = false;
     }
 
-    IEnumerator SpawnWave()
+    IEnumerator FillProgressBar(float delay)
     {
-        int enemiesInWave = waves.GetEnemiesInWave(currentWave);
-        int[] enemyTypes = waves.GetWave(currentWave).Enemies;
+        progressBar.style.display = DisplayStyle.Flex;
+        progressBar.value = 0;
+
+        float elapsedTime = 0;
+        while (elapsedTime < delay)
+        {
+            elapsedTime += Time.deltaTime;
+            progressBar.value = Mathf.Clamp01(elapsedTime / delay) * 100; // Scale the value to be between 0 and 100
+            yield return null;
+        }
+
+        progressBar.value = 100; // Ensure the progress bar is full at the end
+        yield return new WaitForSeconds(0.5f); // Add a small delay to show the filled progress bar before hiding it
+
+        progressBar.style.display = DisplayStyle.None;
+        progressBar.value = 0;
+    }
+
+    IEnumerator SpawnWave(int waveNumber)
+    {
+        int enemiesInWave = waves.GetEnemiesInWave(waveNumber);
+        int[] enemyTypes = waves.GetWave(waveNumber).Enemies;
 
         for (int i = 0; i < enemiesInWave; i++)
         {
-            SpawnEnemy(enemyTypes[i]);
+            int enemyType = enemyTypes[i];
+            GameObject enemy = Instantiate(
+                enemyPrefabs[enemyType],
+                spawnPoints[Random.Range(0, 8)],
+                Quaternion.identity
+            );
+            EnemyMovement enemyMovementScript = enemy.GetComponent<EnemyMovement>();
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            if (enemyMovementScript != null && enemyScript != null)
+            {
+                ScaleEnemyStats(enemyMovementScript, waveNumber);
+                enemyScript.OnEnemyDeath += HandleEnemyDeath;
+            }
+            else
+            {
+                Debug.LogError("Enemy prefab missing Enemy script.");
+            }
+            activeEnemies.Add(enemy);
             yield return new WaitForSeconds(spawnInterval);
         }
+    }
+
+    void ScaleEnemyStats(EnemyMovement enemy, int waveNumber)
+    {
+        float scaleFactor = 1 + (waveNumber * 0.1f);
+        enemy.health = (int)(enemy.health * scaleFactor);
+        enemy.damage = (int)(enemy.damage * scaleFactor);
     }
 
     void SpawnEnemy(int enemyType)
     {
         GameObject enemy = Instantiate(
             enemyPrefabs[enemyType],
-            spawnPoints[enemiesSpawned % 4],
+            spawnPoints[Random.Range(0, 8)],
             Quaternion.identity
         );
         enemiesSpawned++;

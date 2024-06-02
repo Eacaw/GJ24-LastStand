@@ -124,12 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b5ae18f7157754f9afbe883c11fc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 4
   canStart: 1
   damage: 25
-  health: 60
+  health: 100
   damageInterval: 1
-  value: 5
+  value: 4
   scoreValue: 4
   damageSoundClip: {fileID: 8300000, guid: e8d18621988ca174c8afb743c12443f7, type: 3}
 --- !u!65 &6795596065290898275
