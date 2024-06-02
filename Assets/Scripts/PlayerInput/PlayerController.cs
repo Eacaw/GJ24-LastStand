@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private VisualElement root;
     private Label currencyCounter;
     private Label scoreCounter;
+    private Label gameOverScoreLabel;
 
     void Start()
     {
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
         currencyCounter = root.Q<Label>("CurrencyCount");
         currencyCounter.text = currency.ToString();
         scoreCounter = root.Q<Label>("ScoreCount");
+        gameOverScoreLabel = root.Q<Label>("GameOverScoreLabel");
         scoreCounter.text = score.ToString();
     }
 
@@ -45,5 +47,6 @@ public class PlayerController : MonoBehaviour
     {
         score += amount;
         scoreCounter.text = score.ToString();
+        gameOverScoreLabel.text = score.ToString();
     }
 }

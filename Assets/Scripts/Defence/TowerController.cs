@@ -47,7 +47,7 @@ public class TowerController : MonoBehaviour
 
         if (healthbar != null)
         {
-            healthbar.SetHealth(currentHealth / health);
+            healthbar.SetHealth(1);
         }
     }
 
@@ -271,6 +271,7 @@ public class TowerController : MonoBehaviour
 
             if (isTreasure)
             {
+                Debug.Log("Treasure Destroyed");
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (GameObject enemy in enemies)
                 {

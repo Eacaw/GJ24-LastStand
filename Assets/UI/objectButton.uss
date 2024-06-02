@@ -28,3 +28,6 @@
     justify-content: space-between;
     -unity-background-image-tint-color: rgb(200, 200, 200);
 }
+
+.unity-progress-bar {
+}

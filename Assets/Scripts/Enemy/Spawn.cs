@@ -21,6 +21,7 @@ public class Spawn : MonoBehaviour
     private List<GameObject> activeEnemies = new List<GameObject>();
 
     public UIDocument UIDocument;
+    private ProgressBar progressBar;
     private VisualElement root;
     private Label waveCounter;
     private PlayerController playerController;
@@ -29,6 +30,14 @@ public class Spawn : MonoBehaviour
     {
         root = UIDocument.rootVisualElement;
         waveCounter = root.Q<Label>("WaveCount");
+        progressBar = root.Q<ProgressBar>("NextWaveProgressBar");
+        var actualBar = root.Q(className: "unity-progress-bar__progress");
+        var bar__background = root.Q(className: "unity-progress-bar__background");
+        actualBar.style.backgroundColor = new Color(0, 1, 0, 0.5f);
+        bar__background.style.backgroundColor = new Color(2, 2, 2, 0.3f);
+
+        progressBar.style.display = DisplayStyle.None; // Hide the progress bar initially
+
         spawnPoints = new Vector3[8];
         spawnPoints[0] = new Vector3(-15, 0, 0);
         spawnPoints[1] = new Vector3(15, 0, 0);
@@ -63,19 +72,39 @@ public class Spawn : MonoBehaviour
     {
         isSpawning = true;
 
-        yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
-
         while (currentWave < waves.GetTotalWaves())
         {
+            // Show and fill the progress bar between waves
+            yield return StartCoroutine(FillProgressBar(waves.GetDelayBetweenWaves()));
+
             yield return StartCoroutine(SpawnWave(currentWave));
             yield return new WaitUntil(() => activeEnemies.Count == 0);
             currentWave++;
             waveCounter.text = (currentWave + 1).ToString();
             playerController.AddScore(10);
-            yield return new WaitForSeconds(waves.GetDelayBetweenWaves());
         }
 
         isSpawning = false;
+    }
+
+    IEnumerator FillProgressBar(float delay)
+    {
+        progressBar.style.display = DisplayStyle.Flex;
+        progressBar.value = 0;
+
+        float elapsedTime = 0;
+        while (elapsedTime < delay)
+        {
+            elapsedTime += Time.deltaTime;
+            progressBar.value = Mathf.Clamp01(elapsedTime / delay) * 100; // Scale the value to be between 0 and 100
+            yield return null;
+        }
+
+        progressBar.value = 100; // Ensure the progress bar is full at the end
+        yield return new WaitForSeconds(0.5f); // Add a small delay to show the filled progress bar before hiding it
+
+        progressBar.style.display = DisplayStyle.None;
+        progressBar.value = 0;
     }
 
     IEnumerator SpawnWave(int waveNumber)

@@ -75,7 +75,7 @@ public class EnemyMovement : MonoBehaviour
             // Deal damage if in range and cooldown has elapsed
             if (
                 damageCooldown <= 0f
-                && Vector3.Distance(transform.position, target.transform.position) <= 0.5f
+                && Vector3.Distance(transform.position, target.transform.position) <= 1f
             )
             {
                 DamageTarget();
@@ -182,7 +182,7 @@ public class EnemyMovement : MonoBehaviour
             animator.SetBool("isWalking", true);
             Vector3 targetPosition = path[targetIndex];
             Vector3 direction = (targetPosition - transform.position).normalized;
-            if (Vector3.Distance(transform.position, path[path.Count - 1]) > 1)
+            if (Vector3.Distance(transform.position, path[path.Count - 1]) > 0.75f)
             {
                 rb.MovePosition(transform.position + direction * speed * Time.fixedDeltaTime);
             }
