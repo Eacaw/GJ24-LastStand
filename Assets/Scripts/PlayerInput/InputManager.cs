@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
     private UIDocument _uiDocument;
 
     public event Action OnLmb,
-        OnEsc,
+        OnRmb,
         OnR;
     private Vector3 lastPosition;
 
@@ -32,9 +32,9 @@ public class InputManager : MonoBehaviour
         {
             OnR?.Invoke();
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetMouseButtonDown(1))
         {
-            OnEsc?.Invoke();
+            OnRmb?.Invoke();
         }
     }
 

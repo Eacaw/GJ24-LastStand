@@ -59,7 +59,7 @@ public class GridData : MonoBehaviour
         // Setup the input manager event actions
         inputManager.OnLmb += AddObject;
         inputManager.OnR += OnRotate;
-        inputManager.OnEsc += endBuildMode;
+        inputManager.OnRmb += endBuildMode;
     }
 
     public void Update()
