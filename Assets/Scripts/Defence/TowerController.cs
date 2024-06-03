@@ -25,6 +25,7 @@ public class TowerController : MonoBehaviour
     public GameObject gridData;
     public bool isTreasure = false;
     public HealthBar healthbar;
+    public GameObject SelectionArrow;
 
     // Upgrade tab variables
     private Label towerName;
@@ -119,6 +120,7 @@ public class TowerController : MonoBehaviour
         {
             return;
         }
+        HideAllTargetSelectedIndicators();
         // Display tab
         upgradeTab.style.display = DisplayStyle.Flex;
 
@@ -133,9 +135,14 @@ public class TowerController : MonoBehaviour
         upgradeButton.clicked += handleUpgrade;
 
         Button healButton = upgradeTab.Q<Button>("HealButton");
-        healButton.clicked += handleHeal;
+        healButton.clicked += () =>
+        {
+            handleHeal();
+            HideAllTargetSelectedIndicators();
+        };
 
         refreshUpgradeTabValues();
+        ShowSelectedIndicator();
     }
 
     private void handleUpgrade()
@@ -325,6 +332,49 @@ public class TowerController : MonoBehaviour
         if (rangeIndicator != null)
         {
             rangeIndicator.SetActive(true);
+        }
+    }
+
+    void ShowSelectedIndicator()
+    {
+        if (rangeIndicator != null)
+        {
+            rangeIndicator.SetActive(true);
+            rangeIndicator.transform.localScale = new Vector3(3, 0, 3);
+        }
+
+        if (SelectionArrow != null)
+        {
+            SelectionArrow.SetActive(true);
+        }
+    }
+
+    void HideSelectedIndicator()
+    {
+        if (rangeIndicator != null)
+        {
+            rangeIndicator.SetActive(false);
+        }
+
+        if (SelectionArrow != null)
+        {
+            SelectionArrow.SetActive(false);
+        }
+    }
+
+    void HideAllTargetSelectedIndicators()
+    {
+        GameObject[] towers = GameObject.FindGameObjectsWithTag("Target");
+        GameObject[] barricades = GameObject.FindGameObjectsWithTag("Barricade");
+
+        GameObject[] all = new GameObject[towers.Length + barricades.Length];
+
+        towers.CopyTo(all, 0);
+        barricades.CopyTo(all, towers.Length);
+
+        foreach (GameObject tower in all)
+        {
+            tower.GetComponent<TowerController>().HideSelectedIndicator();
         }
     }
 

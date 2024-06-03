@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Preview
   - Barricade
+  - Selection
   layers:
   - Default
   - TransparentFX
